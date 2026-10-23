@@ -382,6 +382,110 @@
       }
     }
 
+
+
+    /* v11: simplified electronic-board checkout layout */
+    #phaseCheckout > div:first-child {
+      min-height: 0 !important;
+      box-sizing: border-box;
+      scrollbar-gutter: stable;
+    }
+    #phaseCheckout #paymentProgressPanel {
+      min-height: 0 !important;
+      overflow: visible !important;
+    }
+    #phaseCheckout #dropSlotArea {
+      min-height: 285px !important;
+      max-height: none !important;
+      overflow: hidden !important;
+      box-sizing: border-box;
+    }
+    #phaseCheckout #insertedMoneyVisual {
+      min-height: 115px !important;
+      max-height: 155px !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      align-content: flex-start !important;
+      flex-shrink: 0 !important;
+    }
+    #phaseCheckout .inserted-money-item {
+      width: 112px !important;
+      min-width: 112px !important;
+      height: 70px !important;
+    }
+    #phaseCheckout .inserted-money-item.coin {
+      width: 72px !important;
+      min-width: 72px !important;
+      height: 72px !important;
+    }
+    #phaseCheckout #cashActionArea {
+      position: relative !important;
+      z-index: 3 !important;
+      margin-top: 10px !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+    #phaseCheckout #btnProceedPayment {
+      min-height: 56px !important;
+      margin: 0 !important;
+      box-sizing: border-box;
+    }
+    #phaseCheckout #paymentConfirmPanel {
+      overflow: hidden !important;
+    }
+
+    @media (min-width: 1025px) {
+      #phaseCheckout > div:first-child {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout #checkoutItemsList {
+        max-height: 64px !important;
+      }
+    }
+
+    @media (min-width: 600px) and (max-width: 1024px) {
+      #phaseCheckout {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout > div:first-child {
+        height: auto !important;
+        min-height: max-content !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 275px !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        max-height: 145px !important;
+      }
+    }
+
+    @media (max-height: 760px) and (min-width: 1025px) {
+      #phaseCheckout > div:first-child {
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 235px !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        min-height: 88px !important;
+        max-height: 105px !important;
+      }
+      #phaseCheckout .inserted-money-item {
+        width: 98px !important;
+        min-width: 98px !important;
+        height: 62px !important;
+      }
+      #phaseCheckout .inserted-money-item.coin {
+        width: 64px !important;
+        min-width: 64px !important;
+        height: 64px !important;
+      }
+    }
+
 </style>
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden flex flex-col">
@@ -393,7 +497,7 @@
       </div>
       <div>
         <h1 id="appStoreTitle" class="text-2xl sm:text-3xl font-black text-amber-400">꿈나무 카페</h1>
-        <p class="text-xs sm:text-sm text-slate-300 font-bold">특수학급 키오스크 화폐 학습 앱</p>
+        <p class="text-xs sm:text-sm text-slate-300 font-bold">특수교육 키오스크 화폐 학습 앱</p>
       </div>
     </div>
 
@@ -478,108 +582,108 @@
     <section id="phaseCheckout" class="hidden w-full h-full flex flex-col md:flex-row bg-slate-900 overflow-hidden">
       
       <!-- LEFT SPLIT: Kiosk Checkout Window -->
-      <div class="w-full md:w-3/5 lg:w-7/12 h-full flex flex-col bg-slate-100 p-4 sm:p-6 border-r border-slate-300 overflow-y-auto custom-scrollbar">
-        
-        <!-- Header & Back Button -->
-        <div class="flex items-center justify-between mb-3 flex-shrink-0">
-          <button onclick="switchView('kiosk')" class="px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-extrabold rounded-2xl text-base sm:text-xl flex items-center space-x-2 shadow-sm transition active:scale-95">
+      <div class="w-full md:w-3/5 lg:w-7/12 h-full flex flex-col bg-slate-100 p-3 sm:p-5 border-r border-slate-300 overflow-y-auto custom-scrollbar">
+        <!-- Compact Header -->
+        <div class="flex items-center justify-between mb-2 flex-shrink-0">
+          <button onclick="switchView('kiosk')" class="px-3 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-extrabold rounded-xl text-base sm:text-lg flex items-center space-x-2 shadow-sm transition active:scale-95">
             <i class="fa-solid fa-chevron-left"></i>
-            <span>상품 수정하기</span>
+            <span>상품 수정</span>
           </button>
           <span class="font-black text-slate-800 text-xl sm:text-3xl">결제 단계</span>
         </div>
 
-        <!-- Order Summary Box -->
-        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm mb-3 flex-shrink-0">
-          <h3 class="font-black text-slate-800 mb-2 border-b pb-2 text-lg sm:text-2xl flex justify-between items-center">
-            <span>주문 상품 목록</span>
-            <span id="checkoutItemSummaryText" class="text-sm sm:text-lg text-amber-600 font-extrabold"></span>
-          </h3>
-          <div id="checkoutItemsList" class="max-h-28 overflow-y-auto space-y-1.5 text-base sm:text-xl font-bold text-slate-700 pr-1 custom-scrollbar">
+        <!-- Compact Order Summary: keep the payment learning area as the main focus -->
+        <div class="bg-white px-3 py-2.5 rounded-xl border border-slate-200 shadow-sm mb-2 flex-shrink-0">
+          <div class="flex items-center justify-between gap-2 mb-1.5">
+            <h3 class="font-black text-slate-800 text-base sm:text-xl">주문 상품</h3>
+            <span id="checkoutItemSummaryText" class="text-xs sm:text-base text-amber-600 font-extrabold"></span>
+          </div>
+          <div id="checkoutItemsList" class="max-h-16 sm:max-h-20 overflow-y-auto space-y-1 text-sm sm:text-base font-bold text-slate-700 pr-1 custom-scrollbar">
             <!-- Populated dynamically -->
           </div>
         </div>
 
         <!-- Payment Method Tabs -->
-        <div id="paymentMethodTabs" class="grid grid-cols-2 gap-3 mb-3 flex-shrink-0">
-          <button id="btnPayMethodCash" onclick="setPaymentMethod('cash')" class="py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-amber-500 text-white border-amber-600 shadow-md transition active:scale-95">
-            <i class="fa-solid fa-money-bill-wave text-2xl sm:text-3xl"></i>
+        <div id="paymentMethodTabs" class="grid grid-cols-2 gap-2 mb-2 flex-shrink-0">
+          <button id="btnPayMethodCash" onclick="setPaymentMethod('cash')" class="py-2.5 sm:py-3 font-black rounded-xl text-base sm:text-xl border-2 flex items-center justify-center space-x-2 bg-amber-500 text-white border-amber-600 shadow-md transition active:scale-95">
+            <i class="fa-solid fa-money-bill-wave text-xl sm:text-2xl"></i>
             <span>현금 결제</span>
           </button>
-          <button id="btnPayMethodCard" onclick="setPaymentMethod('card')" class="py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-white text-slate-700 border-slate-300 hover:bg-slate-50 transition active:scale-95">
-            <i class="fa-regular fa-credit-card text-2xl sm:text-3xl"></i>
+          <button id="btnPayMethodCard" onclick="setPaymentMethod('card')" class="py-2.5 sm:py-3 font-black rounded-xl text-base sm:text-xl border-2 flex items-center justify-center space-x-2 bg-white text-slate-700 border-slate-300 hover:bg-slate-50 transition active:scale-95">
+            <i class="fa-regular fa-credit-card text-xl sm:text-2xl"></i>
             <span>카드 결제</span>
           </button>
         </div>
 
-        <!-- Payment Progress Counters -->
-        <div id="paymentProgressPanel" class="bg-white p-4 sm:p-6 rounded-2xl border-2 border-amber-300 shadow-sm space-y-3 flex-0 flex flex-col justify-start relative min-h-[220px]">
-          
-          <!-- Exact Payment Notice Banner -->
-          <div id="exactPayNotice" class="bg-amber-100 border border-amber-400 text-amber-900 px-3 py-1.5 rounded-xl text-center font-extrabold text-sm sm:text-base">
-            <i class="fa-solid fa-bullhorn text-amber-600 mr-2"></i>금액을 딱 맞게 지불해야 합니다!
+        <!-- Main Payment Learning Area -->
+        <div id="paymentProgressPanel" class="bg-white p-3 sm:p-4 rounded-2xl border-2 border-amber-300 shadow-sm flex flex-col justify-start relative flex-shrink-0">
+          <div id="exactPayNotice" class="bg-amber-100 border border-amber-400 text-amber-900 px-3 py-1.5 rounded-xl text-center font-extrabold text-xs sm:text-sm mb-2">
+            <i class="fa-solid fa-bullhorn text-amber-600 mr-1"></i>금액을 딱 맞게 지불해야 합니다!
           </div>
 
-          <div class="flex justify-between items-center text-slate-700">
-            <span class="font-black text-xl sm:text-3xl">지불할 총 금액</span>
-            <div>
-              <span id="checkoutTargetAmount" class="text-3xl sm:text-5xl font-black text-slate-900">0</span>
-              <span class="font-black text-xl sm:text-3xl">원</span>
+          <!-- Three compact, highly visible payment counters -->
+          <div class="grid grid-cols-3 gap-2 mb-3">
+            <div class="rounded-xl bg-slate-50 border border-slate-200 px-2 py-2 text-center">
+              <div class="font-black text-slate-600 text-xs sm:text-sm">지불할 금액</div>
+              <div class="mt-0.5 whitespace-nowrap"><span id="checkoutTargetAmount" class="text-2xl sm:text-4xl font-black text-slate-900">0</span><span class="font-black text-sm sm:text-lg">원</span></div>
+            </div>
+            <div class="rounded-xl bg-emerald-50 border border-emerald-200 px-2 py-2 text-center">
+              <div class="font-black text-emerald-700 text-xs sm:text-sm">현재 넣은 돈</div>
+              <div class="mt-0.5 whitespace-nowrap"><span id="checkoutPaidAmount" class="text-2xl sm:text-4xl font-black text-emerald-600">0</span><span class="font-black text-sm sm:text-lg text-emerald-700">원</span></div>
+            </div>
+            <div class="rounded-xl bg-rose-50 border border-rose-200 px-2 py-2 text-center">
+              <div class="font-black text-rose-700 text-xs sm:text-sm">남은 금액</div>
+              <div class="mt-0.5 whitespace-nowrap"><span id="checkoutRemainingAmount" class="text-2xl sm:text-4xl font-black text-rose-600">0</span><span class="font-black text-sm sm:text-lg text-rose-700">원</span></div>
             </div>
           </div>
 
-          <div id="cashProgressGroup" class="space-y-3 pt-3 border-t-2 border-slate-100">
-            <div class="flex justify-between items-center text-emerald-800">
-              <span class="font-black text-xl sm:text-3xl">현재 투입한 금액</span>
-              <div>
-                <span id="checkoutPaidAmount" class="text-3xl sm:text-5xl font-black text-emerald-600">0</span>
-                <span class="font-black text-xl sm:text-3xl">원</span>
+          <div id="cashProgressGroup">
+            <!-- CASH / CARD DROP ZONE TARGET -->
+            <div id="dropSlotArea"
+                 ondragover="handleDragOver(event)"
+                 ondragleave="handleDragLeave(event)"
+                 ondrop="handleDrop(event)"
+                 class="p-3 sm:p-4 border-4 border-dashed border-amber-400 bg-amber-50 rounded-2xl flex flex-col items-center justify-start text-amber-900 transition relative">
+              <div id="cashDropGuide" class="text-center flex-shrink-0">
+                <i id="slotIcon" class="fa-solid fa-hand-holding-dollar text-3xl sm:text-4xl text-amber-600 mb-1"></i>
+                <p id="slotInstructions" class="font-black text-base sm:text-xl text-center leading-snug">
+                  오른쪽 지갑에서 현금을 터치하거나<br>이곳으로 끌어다 놓으세요!
+                </p>
+              </div>
+
+              <div class="w-full text-center mt-2 flex-shrink-0">
+                <span class="inline-block px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-black text-xs sm:text-sm">내가 넣은 돈</span>
+              </div>
+
+              <!-- Deposited Currency Images: exact order pressed/dropped -->
+              <div id="insertedMoneyVisual" class="flex flex-wrap justify-center items-center mt-2 custom-scrollbar"></div>
+
+              <!-- Confirmation is shown only after the student presses '결제 진행하기'. -->
+              <div id="paymentConfirmPanel" class="hidden absolute inset-0 bg-white/95 flex flex-col items-center justify-center p-4 text-center z-10 rounded-2xl">
+                <div class="text-amber-700 font-black text-xl sm:text-3xl mb-4">결제를 진행하시겠습니까?</div>
+                <div class="flex gap-3 w-full max-w-sm">
+                  <button onclick="confirmPaymentYes()" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg sm:text-xl rounded-2xl shadow active:scale-95">예</button>
+                  <button onclick="confirmPaymentNo()" class="flex-1 py-3 bg-slate-500 hover:bg-slate-600 text-white font-black text-lg sm:text-xl rounded-2xl shadow active:scale-95">아니오</button>
+                </div>
               </div>
             </div>
 
-            <div class="flex justify-between items-center text-rose-600 bg-rose-50 p-3 sm:p-4 rounded-2xl border-2 border-rose-200">
-              <span class="font-black text-xl sm:text-3xl">남은 금액</span>
-              <div>
-                <span id="checkoutRemainingAmount" class="text-4xl sm:text-6xl font-black text-rose-600">0</span>
-                <span class="font-black text-xl sm:text-3xl">원</span>
-              </div>
+            <!-- Payment action is deliberately outside the money image area. -->
+            <div id="cashActionArea">
+              <button id="btnProceedPayment" onclick="showPaymentConfirmation()" class="hidden w-full py-3 sm:py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg sm:text-2xl rounded-2xl shadow active:scale-95">
+                <i class="fa-solid fa-check mr-2"></i>결제 진행하기
+              </button>
             </div>
           </div>
 
-          <!-- CASH / CARD DROP ZONE TARGET -->
-          <div id="dropSlotArea" 
-               ondragover="handleDragOver(event)" 
-               ondragleave="handleDragLeave(event)" 
-               ondrop="handleDrop(event)"
-               class="mt-1 p-4 border-4 border-dashed border-amber-400 bg-amber-50 rounded-2xl flex flex-col items-center justify-start text-amber-900 transition relative overflow-hidden">
-            <i id="slotIcon" class="fa-solid fa-hand-holding-dollar text-4xl sm:text-5xl text-amber-600 mb-1"></i>
-            <p id="slotInstructions" class="font-black text-lg sm:text-2xl text-center leading-snug">
-              오른쪽 지갑에서 현금을 터치하거나<br>이곳으로 끌어다 놓으세요!
-            </p>
-            <div class="w-full text-center mt-2">
-              <span class="inline-block px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-black text-sm sm:text-base">투입한 돈</span>
+          <!-- CARD SECTION -->
+          <div id="cardProgressGroup" class="hidden">
+            <div id="cardDropSlotArea" class="p-5 sm:p-8 border-4 border-dashed border-slate-300 bg-slate-50 rounded-2xl flex flex-col items-center justify-center text-slate-700">
+              <i class="fa-regular fa-credit-card text-5xl sm:text-6xl text-amber-500 mb-3"></i>
+              <p class="font-black text-lg sm:text-2xl text-center">오른쪽 카드로 결제할 수 있어요.</p>
             </div>
-            <!-- Deposited Currency Images: shown in the exact order pressed/dropped -->
-            <div id="insertedMoneyVisual" class="flex flex-wrap justify-center items-center mt-2 custom-scrollbar"></div>
-
-            <!-- Payment confirmation appears only after the exact payment/card payment is complete -->
-            <div id="paymentConfirmPanel" class="hidden absolute inset-0 bg-white/95 flex flex-col items-center justify-center p-4 text-center z-10">
-              <div class="text-amber-700 font-black text-2xl sm:text-3xl mb-4">결제를 진행하시겠습니까?</div>
-              <div class="flex gap-3 w-full max-w-sm">
-                <button onclick="confirmPaymentYes()" class="flex-1 py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xl rounded-2xl shadow active:scale-95">예</button>
-                <button onclick="confirmPaymentNo()" class="flex-1 py-3.5 bg-slate-500 hover:bg-slate-600 text-white font-black text-xl rounded-2xl shadow active:scale-95">아니오</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Separate payment action area: never covers the inserted money images -->
-          <div id="cashActionArea">
-            <button id="btnProceedPayment" onclick="confirmPaymentYes()" class="hidden px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl shadow active:scale-95">
-              <i class="fa-solid fa-check mr-2"></i>결제 진행하기
-            </button>
           </div>
         </div>
-
       </div>
 
       <!-- RIGHT SPLIT: My Wallet Window -->
