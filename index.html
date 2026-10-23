@@ -486,6 +486,156 @@
       }
     }
 
+
+
+    /* v12: tablet scrolling / no-clipping layout
+       On tablets the kiosk and checkout become one natural vertical document.
+       The wallet stays on its own section, but no important button is trapped
+       inside a fixed-height flex box. */
+    @media (min-width: 600px) and (max-width: 1024px) {
+      /* SHOPPING: let the whole kiosk phase scroll, including the cart footer. */
+      #phaseKiosk {
+        display: block !important;
+        height: auto !important;
+        min-height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:first-child {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        flex: none !important;
+      }
+      #phaseKiosk > div:last-child {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        flex: none !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: 55vh !important;
+        overflow-y: auto !important;
+      }
+      #phaseKiosk #cartItemsList {
+        flex: none !important;
+        height: auto !important;
+        min-height: 90px !important;
+        max-height: 30vh !important;
+        overflow-y: auto !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        position: relative !important;
+        z-index: 2 !important;
+        padding-bottom: 16px !important;
+      }
+      #phaseKiosk #btnProceedToCheckout {
+        min-height: 64px !important;
+        display: flex !important;
+        visibility: visible !important;
+      }
+
+      /* CHECKOUT: one vertical scroll area for the complete left + wallet flow. */
+      #phaseCheckout {
+        display: block !important;
+        height: auto !important;
+        min-height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        flex: none !important;
+        box-sizing: border-box !important;
+      }
+      #phaseCheckout > div:first-child {
+        padding-bottom: 18px !important;
+      }
+
+      /* Make the money-learning area breathe instead of clipping its contents. */
+      #phaseCheckout #paymentProgressPanel {
+        overflow: visible !important;
+        min-height: 0 !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 315px !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        min-height: 120px !important;
+        max-height: 220px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        flex: 0 0 auto !important;
+      }
+      #phaseCheckout #cashActionArea {
+        position: relative !important;
+        z-index: 4 !important;
+        margin-top: 12px !important;
+        padding-bottom: 2px !important;
+      }
+      #phaseCheckout #btnProceedPayment {
+        min-height: 64px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      /* WALLET: no internal height trap; the page scrolls down to the reset button. */
+      #phaseCheckout > div:last-child {
+        padding-top: 18px !important;
+        padding-bottom: 24px !important;
+      }
+      #phaseCheckout #walletCashSection {
+        display: flex !important;
+        flex: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        justify-content: flex-start !important;
+        margin: 0 !important;
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+      }
+      #phaseCheckout #walletCashSection > div {
+        flex-shrink: 0 !important;
+      }
+      #phaseCheckout #walletCoinContainer {
+        flex-shrink: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #walletCashSection > button {
+        flex: none !important;
+        min-height: 52px !important;
+        margin-top: 2px !important;
+      }
+      #phaseCheckout #walletCardSection {
+        min-height: 280px !important;
+        height: auto !important;
+        flex: none !important;
+      }
+    }
+
+    /* Very short tablets: keep touch targets large, but reduce only decorative gaps. */
+    @media (min-width: 600px) and (max-width: 1024px) and (max-height: 800px) {
+      #phaseKiosk #productGrid { max-height: 50vh !important; }
+      #phaseKiosk #cartItemsList { max-height: 28vh !important; }
+      #phaseCheckout #dropSlotArea { min-height: 295px !important; }
+      #phaseCheckout #insertedMoneyVisual { max-height: 190px !important; }
+    }
+
 </style>
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden flex flex-col">
