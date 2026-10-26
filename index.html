@@ -3200,3 +3200,81 @@
   </script>
 </body>
 </html>
+
+<style id="v23-fixed-cart-footer">
+/* v23: Tablet cart footer must never be taller than the available viewport.
+   The cart list gets the remaining height; the total/payment footer is compact and fixed. */
+@media (min-width: 600px) and (max-width: 1400px) {
+  #phaseKiosk:not(.hidden) > div:last-child {
+    min-height: 0 !important;
+    overflow: hidden !important;
+    grid-template-rows: auto minmax(0, 1fr) minmax(150px, auto) !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    box-sizing: border-box !important;
+    min-height: 150px !important;
+    height: 150px !important;
+    max-height: 150px !important;
+    padding: 10px 16px 12px !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    z-index: 100 !important;
+    background: #f8fafc !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child > div:first-child {
+    flex: 0 0 50px !important;
+    min-height: 50px !important;
+    height: 50px !important;
+    line-height: 1 !important;
+  }
+
+  #phaseKiosk:not(.hidden) #cartTotalAmount {
+    font-size: 2.35rem !important;
+    line-height: 1 !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child > div:first-child > span:first-child {
+    font-size: 1.45rem !important;
+    line-height: 1 !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child > div:first-child > div:last-child > span:last-child {
+    font-size: 1.35rem !important;
+    line-height: 1 !important;
+  }
+
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    flex: 0 0 62px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 62px !important;
+    height: 62px !important;
+    max-height: 62px !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    border-radius: 14px !important;
+    font-size: 1.55rem !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Portrait tablet: the cart is the lower grid row, and its footer is compact. */
+@media (min-width: 600px) and (max-width: 799px) {
+  #phaseKiosk:not(.hidden) {
+    grid-template-rows: minmax(0, 1fr) minmax(190px, 36%) !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    height: 150px !important;
+    min-height: 150px !important;
+    max-height: 150px !important;
+  }
+}
+</style>
