@@ -1192,6 +1192,131 @@
     }
 
 </style>
+
+<style id="v21-tablet-layout-fix">
+/* v21: FINAL TABLET LAYOUT FIX
+   Keep the active phase absolutely inside <main>, so the cart footer and payment controls
+   cannot be pushed outside the visible tablet viewport. Desktop/e-board layout is untouched. */
+@media (min-width: 600px) and (max-width: 1400px) {
+  main { position: relative !important; min-height: 0 !important; overflow: hidden !important; }
+
+  #phaseKiosk.hidden, #phaseCheckout.hidden { display: none !important; }
+
+  /* LANDSCAPE */
+  #phaseKiosk:not(.hidden) {
+    position: absolute !important;
+    inset: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(330px, 38%) !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
+  }
+  #phaseKiosk:not(.hidden) > div:first-child {
+    width: auto !important; height: auto !important;
+    min-width: 0 !important; min-height: 0 !important;
+    overflow-y: auto !important; overflow-x: hidden !important;
+  }
+  #phaseKiosk:not(.hidden) > div:first-child > div:last-child {
+    min-height: 0 !important; overflow: visible !important;
+  }
+  #phaseKiosk:not(.hidden) #productGrid { overflow: visible !important; max-height: none !important; }
+  #phaseKiosk:not(.hidden) > div:last-child {
+    width: auto !important; height: auto !important;
+    min-width: 0 !important; min-height: 0 !important;
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) auto !important;
+    overflow: hidden !important;
+    position: relative !important;
+    z-index: 5 !important;
+  }
+  #phaseKiosk:not(.hidden) #cartItemsList {
+    min-height: 0 !important; height: auto !important;
+    overflow-y: auto !important; overflow-x: hidden !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    min-height: 0 !important; height: auto !important;
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 50 !important;
+    pointer-events: auto !important;
+  }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    position: relative !important;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 64px !important;
+    height: 64px !important;
+    margin: 0 !important;
+  }
+
+  #phaseCheckout:not(.hidden) {
+    position: absolute !important;
+    inset: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 58%) minmax(300px, 42%) !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    overflow: hidden !important;
+    z-index: 2 !important;
+  }
+  #phaseCheckout:not(.hidden) > div:first-child,
+  #phaseCheckout:not(.hidden) > div:last-child {
+    width: auto !important; height: auto !important;
+    min-width: 0 !important; min-height: 0 !important;
+    max-height: none !important; box-sizing: border-box !important;
+    overflow-y: auto !important; overflow-x: hidden !important;
+  }
+  #phaseCheckout #paymentProgressPanel { min-height: 0 !important; overflow: visible !important; }
+  #phaseCheckout #dropSlotArea { min-height: 150px !important; max-height: 220px !important; overflow: visible !important; }
+  #phaseCheckout #insertedMoneyVisual { max-height: 110px !important; overflow-y: auto !important; }
+  #phaseCheckout #cashActionArea { position: relative !important; z-index: 100 !important; pointer-events: auto !important; }
+  #phaseCheckout #btnProceedPayment {
+    position: relative !important; z-index: 110 !important;
+    pointer-events: auto !important; display: flex !important; visibility: visible !important;
+    opacity: 1 !important; min-height: 64px !important; height: 64px !important;
+  }
+}
+
+/* PORTRAIT TABLET */
+@media (min-width: 600px) and (max-width: 799px) {
+  #phaseKiosk:not(.hidden) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr) minmax(250px, 44%) !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child {
+    border-left: 0 !important;
+    border-top: 2px solid #cbd5e1 !important;
+    grid-template-rows: auto minmax(0, 1fr) auto !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    padding: 8px 12px max(8px, env(safe-area-inset-bottom)) !important;
+  }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    min-height: 64px !important; height: 64px !important;
+  }
+
+  #phaseCheckout:not(.hidden) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr) minmax(280px, 45%) !important;
+  }
+  #phaseCheckout:not(.hidden) > div:first-child,
+  #phaseCheckout:not(.hidden) > div:last-child { padding-bottom: 10px !important; }
+}
+
+/* Very narrow / short tablet safety: never let the action button shrink away. */
+@media (min-width: 600px) and (max-width: 1400px) and (max-height: 700px) {
+  #phaseKiosk:not(.hidden) > div:last-child { grid-template-rows: auto minmax(0,1fr) 92px !important; }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child { padding: 8px 10px !important; }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout { height: 68px !important; min-height: 68px !important; }
+}
+</style>
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden flex flex-col">
 
