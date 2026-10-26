@@ -1455,6 +1455,104 @@
   #phaseKiosk:not(.hidden) #btnProceedToCheckout { height:62px !important; min-height:62px !important; }
 }
 </style>
+
+<style id="tablet-full-page-scroll-v25">
+/* v25: tablet full-page scrolling comparison version */
+@media (min-width: 600px) and (max-width: 1400px) {
+  html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+  body {
+    display: block !important;
+    min-height: 100vh !important;
+  }
+  body > header, header {
+    position: relative !important;
+    flex: none !important;
+  }
+  main {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    flex: none !important;
+  }
+  #phaseKiosk:not(.hidden), #phaseCheckout:not(.hidden) {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Kiosk: let the entire page grow naturally */
+  #phaseKiosk:not(.hidden) {
+    min-height: 0 !important;
+  }
+  #phaseKiosk .menu-board,
+  #phaseKiosk .menu-grid,
+  #phaseKiosk .products-area,
+  #phaseKiosk .product-area,
+  #phaseKiosk .cart-panel,
+  #phaseKiosk .cart-list,
+  #phaseKiosk .cart-items,
+  #phaseKiosk .cart-footer,
+  #phaseKiosk .cart-summary,
+  #phaseKiosk .cart-actions {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  /* Keep the cart footer in normal document flow: no floating/overlay */
+  #phaseKiosk .cart-panel,
+  #phaseKiosk .cart {
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  #phaseKiosk .cart-footer,
+  #phaseKiosk .cart-summary,
+  #phaseKiosk .cart-actions {
+    position: relative !important;
+    bottom: auto !important;
+    top: auto !important;
+    inset: auto !important;
+    transform: none !important;
+    z-index: 2 !important;
+  }
+
+  /* Checkout page also becomes ordinary document flow */
+  #phaseCheckout:not(.hidden) .payment-area,
+  #phaseCheckout:not(.hidden) .wallet-area,
+  #phaseCheckout:not(.hidden) .payment-panel,
+  #phaseCheckout:not(.hidden) .wallet-panel,
+  #phaseCheckout:not(.hidden) .inserted-money-area {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 799px) {
+  #phaseKiosk:not(.hidden) {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  #phaseKiosk .menu-area,
+  #phaseKiosk .product-area,
+  #phaseKiosk .products-area {
+    flex: none !important;
+    width: 100% !important;
+  }
+  #phaseKiosk .cart-panel,
+  #phaseKiosk .cart {
+    width: 100% !important;
+    flex: none !important;
+  }
+}
+</style>
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden flex flex-col">
 
