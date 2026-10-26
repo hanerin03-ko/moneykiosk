@@ -1317,6 +1317,144 @@
   #phaseKiosk:not(.hidden) #btnProceedToCheckout { height: 68px !important; min-height: 68px !important; }
 }
 </style>
+
+<style id="v22-real-fixed-cart-footer">
+/* v22: 결제하기 버튼을 '화면 안에 존재하는 고정 하단 영역'으로 분리
+   핵심: 장바구니 내용이 길어져도 총액/결제 버튼은 절대 밀리지 않는다. */
+@media (min-width: 600px) and (max-width: 1600px) {
+  html, body { width:100%; height:100%; overflow:hidden !important; }
+  body { min-height:0 !important; }
+  main { flex:1 1 auto !important; min-height:0 !important; height:auto !important; overflow:hidden !important; position:relative !important; }
+
+  #phaseKiosk.hidden, #phaseCheckout.hidden { display:none !important; }
+
+  #phaseKiosk:not(.hidden) {
+    position:absolute !important; inset:0 !important;
+    width:100% !important; height:100% !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    display:grid !important;
+    z-index:20 !important;
+  }
+
+  /* 기본 태블릿: 가로 */
+  #phaseKiosk:not(.hidden) { grid-template-columns:minmax(0,1fr) 40% !important; grid-template-rows:1fr !important; }
+
+  #phaseKiosk:not(.hidden) > div:first-child {
+    min-width:0 !important; min-height:0 !important;
+    width:auto !important; height:auto !important;
+    overflow-y:auto !important; overflow-x:hidden !important;
+    box-sizing:border-box !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:first-child > div:nth-child(2) {
+    min-height:0 !important;
+    overflow:visible !important;
+  }
+
+  #phaseKiosk:not(.hidden) #productGrid {
+    overflow:visible !important;
+    max-height:none !important;
+  }
+
+  /* 장바구니: 헤더 / 상품목록 / 고정 하단영역 */
+  #phaseKiosk:not(.hidden) > div:last-child {
+    min-width:0 !important; min-height:0 !important;
+    width:auto !important; height:auto !important;
+    position:relative !important;
+    display:block !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+    z-index:30 !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:first-child {
+    height:76px !important;
+    box-sizing:border-box !important;
+    position:relative !important;
+    z-index:40 !important;
+  }
+
+  #phaseKiosk:not(.hidden) #cartItemsList {
+    position:absolute !important;
+    left:0 !important; right:0 !important; top:76px !important; bottom:170px !important;
+    height:auto !important; min-height:0 !important;
+    box-sizing:border-box !important;
+    overflow-y:auto !important; overflow-x:hidden !important;
+    padding:12px !important;
+    z-index:31 !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    position:absolute !important;
+    left:0 !important; right:0 !important; bottom:0 !important;
+    height:170px !important; min-height:170px !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    padding:10px 14px !important;
+    background:#f8fafc !important;
+    border-top:3px solid #cbd5e1 !important;
+    overflow:hidden !important;
+    z-index:100 !important;
+    pointer-events:auto !important;
+  }
+
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    position:relative !important;
+    display:flex !important;
+    width:100% !important;
+    height:64px !important; min-height:64px !important;
+    margin:8px 0 0 !important;
+    visibility:visible !important; opacity:1 !important;
+    z-index:200 !important;
+    pointer-events:auto !important;
+    touch-action:manipulation !important;
+    flex-shrink:0 !important;
+  }
+
+  /* 결제 화면도 같은 원리로 하단 버튼 영역을 보장 */
+  #phaseCheckout:not(.hidden) {
+    position:absolute !important; inset:0 !important;
+    width:100% !important; height:100% !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,58%) minmax(0,42%) !important;
+    overflow:hidden !important; z-index:25 !important;
+  }
+  #phaseCheckout:not(.hidden) > div:first-child,
+  #phaseCheckout:not(.hidden) > div:last-child {
+    min-width:0 !important; min-height:0 !important;
+    width:auto !important; height:auto !important;
+    overflow-y:auto !important; overflow-x:hidden !important;
+    box-sizing:border-box !important;
+  }
+  #phaseCheckout #btnProceedPayment {
+    position:relative !important; z-index:300 !important;
+    display:flex !important; visibility:visible !important; opacity:1 !important;
+    min-height:64px !important; height:64px !important;
+    pointer-events:auto !important; touch-action:manipulation !important;
+  }
+}
+
+/* 세로형: 장바구니를 화면 아래에 배치하고 그 안에서만 목록을 스크롤 */
+@media (orientation: portrait) and (min-width: 600px) and (max-width: 1600px) {
+  #phaseKiosk:not(.hidden) {
+    grid-template-columns:1fr !important;
+    grid-template-rows:minmax(0,1fr) 46% !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child {
+    border-left:0 !important;
+    border-top:3px solid #cbd5e1 !important;
+  }
+}
+
+/* 아주 짧은 화면에서는 하단 영역을 조금 더 크게 */
+@media (min-width:600px) and (max-width:1600px) and (max-height:700px) {
+  #phaseKiosk:not(.hidden) > div:last-child > div:first-child { height:66px !important; }
+  #phaseKiosk:not(.hidden) #cartItemsList { top:66px !important; bottom:166px !important; }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child { height:166px !important; min-height:166px !important; }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout { height:62px !important; min-height:62px !important; }
+}
+</style>
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden flex flex-col">
 
