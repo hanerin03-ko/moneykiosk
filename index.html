@@ -1204,6 +1204,47 @@
 
         </div>
 
+        <!-- SECTION 4: Menu Board Library & Sharing -->
+        <div class="bg-indigo-50 p-5 rounded-2xl border-2 border-indigo-200 space-y-4">
+          <h3 class="text-lg font-black text-slate-900 flex items-center space-x-2 border-b border-indigo-200 pb-2">
+            <i class="fa-solid fa-layer-group text-indigo-600"></i>
+            <span>메뉴판 보관함</span>
+          </h3>
+          <p class="text-sm text-slate-600 font-bold leading-relaxed">
+            여러 개의 메뉴판을 저장해 두고 필요할 때 바로 바꿔 사용할 수 있습니다. 다른 선생님과 공유할 때는 파일로 내보내고, 받은 파일은 보관함에 추가할 수 있습니다.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button onclick="saveCurrentMenuBoardAs()" class="py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-xl text-base shadow transition active:scale-95 flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>현재 메뉴판 저장하기</span>
+            </button>
+            <button onclick="document.getElementById('menuBoardImportFile').click()" class="py-3.5 bg-white hover:bg-indigo-50 text-indigo-700 font-black rounded-xl text-base border-2 border-indigo-300 shadow transition active:scale-95 flex items-center justify-center space-x-2">
+              <i class="fa-solid fa-file-import"></i>
+              <span>메뉴판 파일 가져오기</span>
+            </button>
+          </div>
+          <input id="menuBoardImportFile" type="file" accept="application/json,.json" class="hidden" onchange="importMenuBoard(event)">
+
+          <div class="bg-white rounded-xl border border-indigo-100 p-3">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="font-black text-slate-700 text-sm"><i class="fa-solid fa-bookmark text-indigo-500 mr-1"></i>저장된 메뉴판</span>
+              <button onclick="renderSavedMenuBoards()" class="text-xs font-bold text-slate-500 hover:text-indigo-700">새로고침</button>
+            </div>
+            <div id="savedMenuBoardList" class="space-y-2 max-h-64 overflow-y-auto pr-1"></div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-indigo-100 p-3 text-xs text-slate-500 font-bold leading-relaxed">
+            <i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i>
+            <span>메뉴판은 이 브라우저의 보관함에 저장됩니다. 다른 기기와 공유하려면 ‘파일로 내보내기’를 사용하세요.</span>
+          </div>
+
+          <button type="button" onclick="openMenuBoardInfo()" class="w-full py-3 bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-black rounded-xl text-sm transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-circle-question"></i>
+            <span>메뉴판 보관함 사용 방법 보기</span>
+          </button>
+        </div>
+
       </div>
 
       <!-- Modal Footer -->
@@ -1213,6 +1254,49 @@
         </button>
       </div>
 
+    </div>
+  </div>
+
+  <!-- Menu Board Information Modal -->
+  <div id="menuBoardInfoModal" class="fixed inset-0 z-[100] hidden bg-black/50 p-4 flex items-center justify-center" onclick="if(event.target===this) closeMenuBoardInfo()">
+    <div class="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl border-2 border-indigo-200">
+      <div class="bg-indigo-600 text-white px-5 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2 font-black text-lg"><i class="fa-solid fa-circle-info"></i><span>메뉴판 보관함 사용 방법</span></div>
+        <button type="button" onclick="closeMenuBoardInfo()" class="w-10 h-10 rounded-xl bg-white/15 hover:bg-white/25 text-xl font-black">×</button>
+      </div>
+      <div class="p-5 space-y-4 text-sm font-bold text-slate-700 leading-relaxed">
+        <div class="rounded-2xl bg-indigo-50 border border-indigo-200 p-4">
+          <div class="font-black text-indigo-800 mb-1">① 현재 메뉴판 저장하기</div>
+          <div>지금 사용 중인 가게 이름, 상품, 가격, 사진 등의 정보를 이 브라우저에 저장합니다. 다음에 같은 컴퓨터에서 바로 불러올 수 있습니다.</div>
+        </div>
+        <div class="rounded-2xl bg-emerald-50 border border-emerald-200 p-4">
+          <div class="font-black text-emerald-800 mb-1">② 불러오기</div>
+          <div>저장해 둔 메뉴판으로 한 번에 바꿉니다. 현재 주문 내용은 초기화되므로 학생이 주문하기 전에 사용하는 것을 권장합니다.</div>
+        </div>
+        <div class="rounded-2xl bg-amber-50 border border-amber-200 p-4">
+          <div class="font-black text-amber-800 mb-1">③ 파일로 내보내기</div>
+          <div>메뉴판을 <strong>JSON 파일</strong>로 컴퓨터에 저장합니다. 다른 컴퓨터에서 사용하거나 백업할 때 활용할 수 있습니다.</div>
+        </div>
+        <div class="rounded-2xl bg-sky-50 border border-sky-200 p-4">
+          <div class="font-black text-sky-800 mb-1">④ 메뉴판 파일 가져오기</div>
+          <div>다른 컴퓨터에서 받은 JSON 메뉴판 파일을 선택하면 현재 앱에 적용하고, 원하면 보관함에도 이름을 정해 저장할 수 있습니다.</div>
+        </div>
+        <div class="rounded-2xl bg-rose-50 border border-rose-200 p-4">
+          <div class="font-black text-rose-800 mb-1">⚠ 참고할 점</div>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>보관함은 <strong>현재 사용 중인 브라우저와 기기 안</strong>에 저장됩니다.</li>
+            <li>브라우저의 사이트 데이터/저장공간을 삭제하면 보관한 메뉴판이 사라질 수 있습니다.</li>
+            <li>상품 사진이 많거나 큰 사진을 여러 개 저장하면 브라우저 저장공간이 부족할 수 있습니다.</li>
+            <li>중요한 메뉴판은 <strong>파일로 내보내기</strong>하여 별도로 보관하는 것을 권장합니다.</li>
+          </ul>
+        </div>
+        <div class="text-center text-xs text-slate-500">
+          <i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i>추천: <strong>메뉴판 저장 → 파일로 내보내기</strong>까지 해 두면 다른 기기에서도 안전하게 사용할 수 있습니다.
+        </div>
+      </div>
+      <div class="px-5 pb-5">
+        <button type="button" onclick="closeMenuBoardInfo()" class="w-full py-3.5 bg-slate-800 hover:bg-slate-900 text-white rounded-2xl font-black">확인</button>
+      </div>
     </div>
   </div>
 
@@ -1245,8 +1329,311 @@
     let draggedCashValue = null;
     let draggedIsCard = false;
 
+    // ==================== MENU BOARD PERSISTENCE & SHARING ====================
+    const MENU_BOARD_STORAGE_KEY = "specialEducationKioskMenuBoard_v1";
+    const MENU_BOARD_LIBRARY_KEY = "specialEducationKioskMenuBoardLibrary_v1";
+
+    function getMenuBoardData() {
+      return {
+        format: "special-education-kiosk-menu-board",
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        storeName: appState.storeName,
+        enableCoins: appState.enableCoins,
+        enableChange: appState.enableChange,
+        categories: [...appState.categories],
+        products: appState.products.map(p => ({
+          id: p.id,
+          name: p.name,
+          price: p.price,
+          category: p.category,
+          image: p.image
+        }))
+      };
+    }
+
+    function getSavedMenuBoards() {
+      try {
+        const raw = localStorage.getItem(MENU_BOARD_LIBRARY_KEY);
+        const list = raw ? JSON.parse(raw) : [];
+        return Array.isArray(list) ? list.filter(item => item && item.id && item.name && isValidMenuBoardData(item.data)) : [];
+      } catch (err) {
+        console.warn("메뉴판 보관함을 불러오지 못했습니다.", err);
+        return [];
+      }
+    }
+
+    function setSavedMenuBoards(list) {
+      try {
+        localStorage.setItem(MENU_BOARD_LIBRARY_KEY, JSON.stringify(list));
+        return true;
+      } catch (err) {
+        console.warn("메뉴판 보관함 저장에 실패했습니다.", err);
+        alert("메뉴판을 저장하지 못했습니다. 상품 사진이 너무 많거나 저장 공간이 부족할 수 있습니다.");
+        return false;
+      }
+    }
+
+    function saveCurrentMenuBoardAs() {
+      playAudio('click');
+      saveAdminSettingsForExport();
+      const defaultName = appState.storeName || "새 메뉴판";
+      const name = prompt("저장할 메뉴판 이름을 입력하세요.", defaultName);
+      if (name === null) return;
+      const cleanName = name.trim() || defaultName;
+      const list = getSavedMenuBoards();
+      const existing = list.find(item => item.name === cleanName);
+      if (existing) {
+        const overwrite = confirm(`“${cleanName}” 메뉴판이 이미 있습니다. 현재 메뉴판으로 덮어쓸까요?`);
+        if (!overwrite) return;
+        existing.data = getMenuBoardData();
+        existing.updatedAt = new Date().toISOString();
+      } else {
+        list.push({
+          id: `board_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+          name: cleanName,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          data: getMenuBoardData()
+        });
+      }
+      if (setSavedMenuBoards(list)) {
+        renderSavedMenuBoards();
+        alert(`“${cleanName}” 메뉴판을 저장했습니다.`);
+      }
+    }
+
+    function renderSavedMenuBoards() {
+      const container = document.getElementById('savedMenuBoardList');
+      if (!container) return;
+      const list = getSavedMenuBoards();
+      container.innerHTML = '';
+      if (!list.length) {
+        container.innerHTML = '<div class="py-5 text-center text-sm text-slate-400 font-bold">저장된 메뉴판이 없습니다.<br>현재 메뉴판을 저장해 보세요.</div>';
+        return;
+      }
+      list.sort((a,b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt));
+      list.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'border-2 border-slate-200 rounded-xl p-3 bg-slate-50';
+        const isCurrent = item.data.storeName === appState.storeName && JSON.stringify(item.data.products) === JSON.stringify(appState.products);
+        const date = new Date(item.updatedAt || item.createdAt).toLocaleDateString('ko-KR');
+        row.innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <div class="min-w-0">
+              <div class="font-black text-slate-800 truncate">${escapeHtml(item.name)} ${isCurrent ? '<span class="text-[10px] text-emerald-600 ml-1">사용 중</span>' : ''}</div>
+              <div class="text-[11px] text-slate-500 font-bold mt-0.5">${escapeHtml(item.data.storeName || '')} · ${item.data.products.length}개 상품 · ${date}</div>
+            </div>
+            <button onclick="loadSavedMenuBoard('${item.id}')" class="shrink-0 px-3 py-2 bg-indigo-600 text-white rounded-lg text-xs font-black hover:bg-indigo-700">불러오기</button>
+          </div>
+          <div class="grid grid-cols-2 gap-2 mt-2">
+            <button onclick="exportSavedMenuBoard('${item.id}')" class="py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-100">파일로 내보내기</button>
+            <button onclick="deleteSavedMenuBoard('${item.id}')" class="py-2 bg-white border border-rose-200 text-rose-600 rounded-lg text-xs font-bold hover:bg-rose-50">삭제</button>
+          </div>`;
+        container.appendChild(row);
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    function loadSavedMenuBoard(id) {
+      const item = getSavedMenuBoards().find(x => x.id === id);
+      if (!item) return;
+      if (!confirm(`“${item.name}” 메뉴판을 불러올까요?\n\n현재 주문 내용은 초기화됩니다.`)) return;
+      playAudio('click');
+      applyMenuBoardData(item.data, false);
+      renderSavedMenuBoards();
+      alert(`“${item.name}” 메뉴판을 불러왔습니다.`);
+    }
+
+    function deleteSavedMenuBoard(id) {
+      const list = getSavedMenuBoards();
+      const item = list.find(x => x.id === id);
+      if (!item) return;
+      if (!confirm(`“${item.name}” 메뉴판을 보관함에서 삭제할까요?`)) return;
+      setSavedMenuBoards(list.filter(x => x.id !== id));
+      renderSavedMenuBoards();
+    }
+
+    function exportSavedMenuBoard(id) {
+      const item = getSavedMenuBoards().find(x => x.id === id);
+      if (!item) return;
+      downloadMenuBoardFile(item.data, item.name);
+    }
+
+    function downloadMenuBoardFile(data, fileName) {
+      try {
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: "application/json;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const safeName = (fileName || data.storeName || '메뉴판')
+          .replace(/[\\/:*?"<>|]/g, '_')
+          .trim() || '메뉴판';
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${safeName}_메뉴판.json`;
+        a.style.display = 'none';
+        a.setAttribute('download', a.download);
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          a.remove();
+          URL.revokeObjectURL(url);
+        }, 1500);
+        return true;
+      } catch (err) {
+        console.error('메뉴판 파일 다운로드 실패:', err);
+        alert('메뉴판 파일을 만들지 못했습니다. 브라우저의 다운로드 권한을 확인해 주세요.');
+        return false;
+      }
+    }
+
+    function openMenuBoardInfo() {
+      const modal = document.getElementById('menuBoardInfoModal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeMenuBoardInfo() {
+      const modal = document.getElementById('menuBoardInfoModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function saveMenuBoardToLocalStorage() {
+      try {
+        localStorage.setItem(MENU_BOARD_STORAGE_KEY, JSON.stringify(getMenuBoardData()));
+      } catch (err) {
+        console.warn("메뉴판 자동 저장에 실패했습니다.", err);
+      }
+    }
+
+    function loadMenuBoardFromLocalStorage() {
+      try {
+        const raw = localStorage.getItem(MENU_BOARD_STORAGE_KEY);
+        if (!raw) return false;
+        const data = JSON.parse(raw);
+        if (!isValidMenuBoardData(data)) return false;
+        applyMenuBoardData(data, false);
+        return true;
+      } catch (err) {
+        console.warn("저장된 메뉴판을 불러오지 못했습니다.", err);
+        return false;
+      }
+    }
+
+    function isValidMenuBoardData(data) {
+      return !!(
+        data &&
+        data.format === "special-education-kiosk-menu-board" &&
+        Array.isArray(data.categories) &&
+        data.categories.length > 0 &&
+        Array.isArray(data.products) &&
+        data.products.every(p =>
+          p &&
+          Number.isFinite(Number(p.id)) &&
+          typeof p.name === "string" &&
+          p.name.trim() &&
+          Number.isFinite(Number(p.price)) &&
+          typeof p.category === "string" &&
+          typeof p.image === "string"
+        )
+      );
+    }
+
+    function applyMenuBoardData(data, announce = true) {
+      appState.storeName = (data.storeName || "꿈나무 카페").toString().trim() || "꿈나무 카페";
+      appState.enableCoins = !!data.enableCoins;
+      appState.enableChange = !!data.enableChange;
+      appState.categories = [...data.categories];
+      appState.products = data.products.map((p, index) => ({
+        id: Number(p.id) || index + 1,
+        name: p.name.trim(),
+        price: Math.max(0, Number(p.price) || 0),
+        category: p.category,
+        image: p.image
+      }));
+      appState.activeCategory = "전체";
+      appState.cart = [];
+      appState.paidAmount = 0;
+      appState.insertedTokens = [];
+      appState.paymentConfirmed = false;
+      appState.tempImageBase64 = "";
+
+      renderCategories();
+      renderProducts();
+      updateCartUI();
+      applySettingsUI();
+      renderAdminCategoryBadges();
+      populateAdminCategoryDropdown();
+      renderAdminProductTable();
+      saveMenuBoardToLocalStorage();
+
+      if (announce) {
+        alert(`“${appState.storeName}” 메뉴판을 불러왔습니다.`);
+      }
+    }
+
+    function exportMenuBoard() {
+      playAudio('click');
+      saveAdminSettingsForExport();
+      downloadMenuBoardFile(getMenuBoardData(), appState.storeName);
+      saveMenuBoardToLocalStorage();
+    }
+
+    function saveAdminSettingsForExport() {
+      const nameInput = document.getElementById('adminStoreNameInput');
+      const coinInput = document.getElementById('adminCoinToggle');
+      const changeInput = document.querySelector('input[name="adminEnableChange"]:checked');
+      if (nameInput) appState.storeName = nameInput.value.trim() || "꿈나무 카페";
+      if (coinInput) appState.enableCoins = coinInput.checked;
+      if (changeInput) appState.enableChange = changeInput.value === 'true';
+    }
+
+    function importMenuBoard(event) {
+      const file = event.target.files && event.target.files[0];
+      event.target.value = '';
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (!isValidMenuBoardData(data)) {
+            alert("올바른 메뉴판 파일이 아닙니다. 이 앱에서 내보낸 JSON 파일을 선택해 주세요.");
+            return;
+          }
+          const fileName = (file.name || '가져온 메뉴판.json').replace(/\.json$/i, '');
+          const ok = confirm(`“${fileName}” 메뉴판을 불러올까요?\n\n현재 메뉴판은 가져온 메뉴판으로 교체됩니다.`);
+          if (!ok) return;
+          playAudio('click');
+          applyMenuBoardData(data, false);
+          alert(`“${fileName}”을(를) 불러왔습니다.\n\n메뉴판 이름: “${data.storeName || '가져온 메뉴판'}”`);
+          const importedName = prompt('이 메뉴판을 보관함에 어떤 이름으로 저장할까요?', fileName || data.storeName || '가져온 메뉴판');
+          if (importedName !== null) {
+            const cleanName = importedName.trim() || data.storeName || '가져온 메뉴판';
+            const list = getSavedMenuBoards();
+            const existing = list.find(item => item.name === cleanName);
+            if (existing) {
+              existing.data = data;
+              existing.updatedAt = new Date().toISOString();
+            } else {
+              list.push({ id: `board_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, name: cleanName, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), data });
+            }
+            setSavedMenuBoards(list);
+            renderSavedMenuBoards();
+          }
+        } catch (err) {
+          console.error(err);
+          alert("메뉴판 파일을 읽는 중 문제가 발생했습니다.");
+        }
+      };
+      reader.readAsText(file, 'utf-8');
+    }
+
     // INITIALIZATION ON WINDOW LOAD
     window.onload = function() {
+      loadMenuBoardFromLocalStorage();
       renderCategories();
       renderProducts();
       updateCartUI();
@@ -1774,6 +2161,7 @@
         renderAdminCategoryBadges();
         populateAdminCategoryDropdown();
         renderAdminProductTable();
+        renderSavedMenuBoards();
         modal.classList.remove('hidden');
       } else {
         modal.classList.add('hidden');
@@ -1822,6 +2210,7 @@
       applySettingsUI();
       renderCategories();
       renderProducts();
+      saveMenuBoardToLocalStorage();
       toggleAdminModal(false);
     }
 
@@ -1860,6 +2249,7 @@
         input.value = '';
         renderAdminCategoryBadges();
         populateAdminCategoryDropdown();
+        saveMenuBoardToLocalStorage();
       }
     }
 
@@ -1873,6 +2263,7 @@
       if (appState.activeCategory === cat) appState.activeCategory = "전체";
       renderAdminCategoryBadges();
       populateAdminCategoryDropdown();
+      saveMenuBoardToLocalStorage();
     }
 
     // PRODUCT FORM AND IMAGE OPTIMIZATION
@@ -1928,6 +2319,7 @@
       resetProductForm();
       renderAdminProductTable();
       renderProducts();
+      saveMenuBoardToLocalStorage();
     }
 
     function resetProductForm() {
@@ -1962,6 +2354,7 @@
       renderAdminProductTable();
       renderProducts();
       updateCartUI();
+      saveMenuBoardToLocalStorage();
     }
 
     function renderAdminProductTable() {
