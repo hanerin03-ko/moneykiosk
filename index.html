@@ -801,6 +801,186 @@
       }
     }
 
+    /* v19: tablet stability fix - respect the actual viewport height after the header.
+       Scroll the content inside the active phase instead of allowing the phase itself
+       to become taller than <main>. */
+    main { min-height: 0 !important; }
+
+    @media (min-width: 800px) and (max-width: 1400px) {
+      #phaseKiosk:not(.hidden),
+      #phaseCheckout:not(.hidden) {
+        height: 100% !important;
+        max-height: 100% !important;
+        min-height: 0 !important;
+        box-sizing: border-box !important;
+      }
+
+      /* SHOPPING / LANDSCAPE */
+      #phaseKiosk:not(.hidden) {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow: hidden !important;
+      }
+      #phaseKiosk > div:first-child {
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:first-child > div:last-child {
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk > div:last-child {
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      #phaseKiosk #cartItemsList {
+        min-height: 0 !important;
+        flex: 1 1 auto !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        flex: 0 0 auto !important;
+        min-height: 0 !important;
+        padding-bottom: 12px !important;
+      }
+      #phaseKiosk #btnProceedToCheckout {
+        display: flex !important;
+        min-height: 60px !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* CHECKOUT / LANDSCAPE */
+      #phaseCheckout:not(.hidden) {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow: hidden !important;
+      }
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        min-height: 0 !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        box-sizing: border-box !important;
+      }
+      #phaseCheckout > div:first-child {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout > div:last-child {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout #paymentProgressPanel {
+        min-height: 0 !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 180px !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        min-height: 90px !important;
+        max-height: 120px !important;
+        overflow-y: auto !important;
+      }
+      #phaseCheckout #cashActionArea {
+        flex-shrink: 0 !important;
+        position: relative !important;
+        z-index: 10 !important;
+      }
+      #phaseCheckout #btnProceedPayment {
+        display: flex !important;
+        min-height: 58px !important;
+        flex-shrink: 0 !important;
+      }
+    }
+
+    /* PORTRAIT / NARROW TABLET: one active screen, with page-level scrolling. */
+    @media (min-width: 600px) and (max-width: 799px) {
+      #phaseKiosk:not(.hidden),
+      #phaseCheckout:not(.hidden) {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 100% !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+
+      #phaseKiosk > div:first-child,
+      #phaseKiosk > div:last-child,
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        flex: 0 0 auto !important;
+      }
+
+      #phaseKiosk > div:first-child > div:last-child {
+        overflow: visible !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk #cartItemsList {
+        max-height: 34vh !important;
+        min-height: 90px !important;
+        overflow-y: auto !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        padding-bottom: 28px !important;
+      }
+      #phaseKiosk #btnProceedToCheckout {
+        display: flex !important;
+        min-height: 68px !important;
+        margin-bottom: 4px !important;
+      }
+
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        padding-bottom: 36px !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 220px !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        max-height: 180px !important;
+        overflow-y: auto !important;
+      }
+      #phaseCheckout #cashActionArea {
+        position: relative !important;
+        z-index: 10 !important;
+        padding-bottom: 8px !important;
+      }
+      #phaseCheckout #btnProceedPayment {
+        display: flex !important;
+        min-height: 68px !important;
+        margin-bottom: 8px !important;
+      }
+    }
+
 </style>
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden flex flex-col">
