@@ -636,6 +636,171 @@
       #phaseCheckout #insertedMoneyVisual { max-height: 190px !important; }
     }
 
+
+    /* v17: tablet final layout fix
+       Landscape tablets keep the shopping/cart and checkout/wallet areas side-by-side.
+       Each functional area gets its own scroll so bottom buttons are never clipped. */
+    @media (min-width: 800px) and (max-width: 1024px) {
+      main { overflow: hidden !important; }
+
+      /* SHOPPING */
+      #phaseKiosk {
+        display: flex !important;
+        flex-direction: row !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+      #phaseKiosk > div:first-child {
+        width: 60% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        flex: 1 1 60% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+      }
+      #phaseKiosk > div:last-child {
+        width: 40% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        flex: 0 0 40% !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk #cartItemsList {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        flex: 0 0 auto !important;
+        position: relative !important;
+        padding-bottom: 14px !important;
+      }
+      #phaseKiosk #btnProceedToCheckout {
+        min-height: 60px !important;
+        display: flex !important;
+        visibility: visible !important;
+      }
+
+      /* CHECKOUT */
+      #phaseCheckout {
+        display: flex !important;
+        flex-direction: row !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+      #phaseCheckout > div:first-child {
+        width: 58% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        flex: 0 0 58% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        padding-bottom: 20px !important;
+      }
+      #phaseCheckout > div:last-child {
+        width: 42% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        flex: 0 0 42% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        padding-bottom: 24px !important;
+      }
+      #phaseCheckout #paymentProgressPanel {
+        overflow: visible !important;
+        min-height: 0 !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 270px !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        min-height: 110px !important;
+        max-height: 145px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout #cashActionArea {
+        position: relative !important;
+        z-index: 5 !important;
+        padding-bottom: 4px !important;
+      }
+      #phaseCheckout #btnProceedPayment {
+        min-height: 60px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      #phaseCheckout #walletCashSection {
+        flex: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #walletCoinContainer,
+      #phaseCheckout #walletCardSection {
+        flex-shrink: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #walletCardSection { min-height: 260px !important; }
+    }
+
+    /* Portrait / narrow tablets: keep the two functional sections stacked,
+       but make each section independently scrollable instead of clipping its footer. */
+    @media (min-width: 600px) and (max-width: 799px) {
+      main { overflow: hidden !important; }
+      #phaseKiosk,
+      #phaseCheckout {
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:first-child,
+      #phaseKiosk > div:last-child,
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk #cartItemsList {
+        max-height: 34vh !important;
+        overflow-y: auto !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        padding-bottom: 16px !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        max-height: 180px !important;
+      }
+      #phaseCheckout > div:last-child {
+        padding-bottom: 30px !important;
+      }
+    }
+
 </style>
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden flex flex-col">
@@ -647,7 +812,7 @@
       </div>
       <div>
         <h1 id="appStoreTitle" class="text-2xl sm:text-3xl font-black text-amber-400">꿈나무 카페</h1>
-        <p class="text-xs sm:text-sm text-slate-300 font-bold">특수교육 키오스크 화폐 학습 앱</p>
+        <p class="text-xs sm:text-sm text-slate-300 font-bold">특수학급 키오스크 화폐 학습 앱</p>
       </div>
     </div>
 
