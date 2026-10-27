@@ -636,6 +636,946 @@
       #phaseCheckout #insertedMoneyVisual { max-height: 190px !important; }
     }
 
+
+    /* v18: view switching must always honor the hidden class.
+       This prevents portrait tablet CSS from showing kiosk and checkout together. */
+    #phaseKiosk.hidden,
+    #phaseCheckout.hidden {
+      display: none !important;
+    }
+
+    /* v18: tablet layout
+       Keep kiosk and checkout as separate views.
+       Landscape tablets get side-by-side columns with independent scrolling.
+       Portrait tablets get a single-column scrolling page, but only the active phase is shown. */
+    @media (min-width: 800px) and (max-width: 1400px) {
+      main { overflow: hidden !important; }
+
+      #phaseKiosk:not(.hidden) {
+        display: flex !important;
+        flex-direction: row !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+      #phaseKiosk > div:first-child {
+        width: 60% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        flex: 1 1 60% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+      }
+      #phaseKiosk > div:last-child {
+        width: 40% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        flex: 0 0 40% !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk #cartItemsList {
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        flex: 0 0 auto !important;
+        position: relative !important;
+        padding-bottom: 14px !important;
+      }
+      #phaseKiosk #btnProceedToCheckout {
+        min-height: 60px !important;
+        display: flex !important;
+        visibility: visible !important;
+      }
+
+      #phaseCheckout:not(.hidden) {
+        display: flex !important;
+        flex-direction: row !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+      }
+      #phaseCheckout > div:first-child {
+        width: 58% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        flex: 0 0 58% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        padding-bottom: 24px !important;
+      }
+      #phaseCheckout > div:last-child {
+        width: 42% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        flex: 0 0 42% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        padding-bottom: 28px !important;
+      }
+      #phaseCheckout #paymentProgressPanel {
+        min-height: 0 !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 220px !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        min-height: 100px !important;
+        max-height: 135px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout #btnProceedPayment {
+        min-height: 60px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      #phaseCheckout #walletCashSection,
+      #phaseCheckout #walletCoinContainer,
+      #phaseCheckout #walletCardSection {
+        flex-shrink: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+    }
+
+    /* Portrait / narrow tablets */
+    @media (min-width: 600px) and (max-width: 799px) {
+      main { overflow: hidden !important; }
+
+      #phaseKiosk:not(.hidden),
+      #phaseCheckout:not(.hidden) {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:first-child,
+      #phaseKiosk > div:last-child,
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow: visible !important;
+        flex: 0 0 auto !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: 58vh !important;
+        overflow-y: auto !important;
+      }
+      #phaseKiosk #cartItemsList {
+        max-height: 34vh !important;
+        overflow-y: auto !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        padding-bottom: 20px !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        max-height: 180px !important;
+      }
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        padding-bottom: 30px !important;
+      }
+    }
+
+    /* v19: tablet stability fix - respect the actual viewport height after the header.
+       Scroll the content inside the active phase instead of allowing the phase itself
+       to become taller than <main>. */
+    main { min-height: 0 !important; }
+
+    @media (min-width: 800px) and (max-width: 1400px) {
+      #phaseKiosk:not(.hidden),
+      #phaseCheckout:not(.hidden) {
+        height: 100% !important;
+        max-height: 100% !important;
+        min-height: 0 !important;
+        box-sizing: border-box !important;
+      }
+
+      /* SHOPPING / LANDSCAPE */
+      #phaseKiosk:not(.hidden) {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow: hidden !important;
+      }
+      #phaseKiosk > div:first-child {
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:first-child > div:last-child {
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk > div:last-child {
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+      #phaseKiosk #cartItemsList {
+        min-height: 0 !important;
+        flex: 1 1 auto !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        flex: 0 0 auto !important;
+        min-height: 0 !important;
+        padding-bottom: 12px !important;
+      }
+      #phaseKiosk #btnProceedToCheckout {
+        display: flex !important;
+        min-height: 60px !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* CHECKOUT / LANDSCAPE */
+      #phaseCheckout:not(.hidden) {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow: hidden !important;
+      }
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        min-height: 0 !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        box-sizing: border-box !important;
+      }
+      #phaseCheckout > div:first-child {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout > div:last-child {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout #paymentProgressPanel {
+        min-height: 0 !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 180px !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        min-height: 90px !important;
+        max-height: 120px !important;
+        overflow-y: auto !important;
+      }
+      #phaseCheckout #cashActionArea {
+        flex-shrink: 0 !important;
+        position: relative !important;
+        z-index: 10 !important;
+      }
+      #phaseCheckout #btnProceedPayment {
+        display: flex !important;
+        min-height: 58px !important;
+        flex-shrink: 0 !important;
+      }
+    }
+
+    /* PORTRAIT / NARROW TABLET: one active screen, with page-level scrolling. */
+    @media (min-width: 600px) and (max-width: 799px) {
+      #phaseKiosk:not(.hidden),
+      #phaseCheckout:not(.hidden) {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 100% !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+
+      #phaseKiosk > div:first-child,
+      #phaseKiosk > div:last-child,
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        height: auto !important;
+        max-height: none !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        flex: 0 0 auto !important;
+      }
+
+      #phaseKiosk > div:first-child > div:last-child {
+        overflow: visible !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk #cartItemsList {
+        max-height: 34vh !important;
+        min-height: 90px !important;
+        overflow-y: auto !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        padding-bottom: 28px !important;
+      }
+      #phaseKiosk #btnProceedToCheckout {
+        display: flex !important;
+        min-height: 68px !important;
+        margin-bottom: 4px !important;
+      }
+
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        padding-bottom: 36px !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 220px !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        max-height: 180px !important;
+        overflow-y: auto !important;
+      }
+      #phaseCheckout #cashActionArea {
+        position: relative !important;
+        z-index: 10 !important;
+        padding-bottom: 8px !important;
+      }
+      #phaseCheckout #btnProceedPayment {
+        display: flex !important;
+        min-height: 68px !important;
+        margin-bottom: 8px !important;
+      }
+    }
+
+
+    /* v20: tablet layout rebuilt around fixed viewport + scrollable content.
+       The action/footer areas must never be pushed below the viewport. */
+    @media (min-width: 800px) and (max-width: 1400px) {
+      /* SHOPPING: explicit 2-column grid; cart footer is always visible. */
+      #phaseKiosk:not(.hidden) {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 40%) !important;
+        grid-template-rows: minmax(0, 1fr) !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+      }
+      #phaseKiosk > div:first-child {
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:first-child > div:last-child {
+        min-height: 0 !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk > div:last-child {
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        display: grid !important;
+        grid-template-rows: auto minmax(0, 1fr) auto !important;
+        overflow: hidden !important;
+      }
+      #phaseKiosk #cartItemsList {
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        padding-bottom: max(10px, env(safe-area-inset-bottom)) !important;
+        overflow: visible !important;
+        z-index: 20 !important;
+      }
+      #phaseKiosk #btnProceedToCheckout {
+        min-height: 64px !important;
+        height: auto !important;
+        display: flex !important;
+        visibility: visible !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* CHECKOUT: both columns are viewport-bound; each column scrolls internally. */
+      #phaseCheckout:not(.hidden) {
+        display: grid !important;
+        grid-template-columns: minmax(0, 58%) minmax(280px, 42%) !important;
+        grid-template-rows: minmax(0, 1fr) !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+      }
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        box-sizing: border-box !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout #paymentProgressPanel {
+        min-height: 0 !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 170px !important;
+        max-height: 220px !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        min-height: 80px !important;
+        max-height: 110px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseCheckout #cashActionArea {
+        flex-shrink: 0 !important;
+        position: relative !important;
+        z-index: 30 !important;
+      }
+      #phaseCheckout #btnProceedPayment {
+        min-height: 62px !important;
+        display: flex !important;
+        visibility: visible !important;
+        flex-shrink: 0 !important;
+      }
+    }
+
+    /* v20 portrait tablet: product area and cart share the viewport,
+       but the cart itself has a fixed footer so the pay button cannot be pushed away. */
+    @media (min-width: 600px) and (max-width: 799px) {
+      #phaseKiosk:not(.hidden) {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-rows: minmax(0, 1fr) minmax(220px, 42%) !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+      }
+      #phaseKiosk > div:first-child {
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk #productGrid {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+      #phaseKiosk > div:last-child {
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        display: grid !important;
+        grid-template-rows: auto minmax(0, 1fr) auto !important;
+        overflow: hidden !important;
+        border-left: 0 !important;
+        border-top: 2px solid #cbd5e1 !important;
+      }
+      #phaseKiosk #cartItemsList {
+        min-height: 0 !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+      }
+      #phaseKiosk > div:last-child > div:last-child {
+        min-height: 0 !important;
+        max-height: none !important;
+        padding: 10px 14px max(10px, env(safe-area-inset-bottom)) !important;
+        overflow: visible !important;
+        z-index: 30 !important;
+      }
+      #phaseKiosk #btnProceedToCheckout {
+        min-height: 62px !important;
+        height: 62px !important;
+        display: flex !important;
+        visibility: visible !important;
+        margin: 0 !important;
+      }
+
+      #phaseCheckout:not(.hidden) {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-rows: minmax(0, 1fr) minmax(260px, 44%) !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+      }
+      #phaseCheckout > div:first-child,
+      #phaseCheckout > div:last-child {
+        width: auto !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+        padding-bottom: 14px !important;
+      }
+      #phaseCheckout #dropSlotArea {
+        min-height: 170px !important;
+        max-height: 210px !important;
+        overflow: visible !important;
+      }
+      #phaseCheckout #insertedMoneyVisual {
+        max-height: 120px !important;
+        overflow-y: auto !important;
+      }
+      #phaseCheckout #cashActionArea {
+        position: relative !important;
+        z-index: 30 !important;
+      }
+      #phaseCheckout #btnProceedPayment {
+        min-height: 62px !important;
+        height: 62px !important;
+        display: flex !important;
+        visibility: visible !important;
+        margin-bottom: 4px !important;
+      }
+    }
+
+</style>
+
+<style id="v21-tablet-layout-fix">
+/* v21: FINAL TABLET LAYOUT FIX
+   Keep the active phase absolutely inside <main>, so the cart footer and payment controls
+   cannot be pushed outside the visible tablet viewport. Desktop/e-board layout is untouched. */
+@media (min-width: 600px) and (max-width: 1400px) {
+  main { position: relative !important; min-height: 0 !important; overflow: hidden !important; }
+
+  #phaseKiosk.hidden, #phaseCheckout.hidden { display: none !important; }
+
+  /* LANDSCAPE */
+  #phaseKiosk:not(.hidden) {
+    position: absolute !important;
+    inset: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(330px, 38%) !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
+  }
+  #phaseKiosk:not(.hidden) > div:first-child {
+    width: auto !important; height: auto !important;
+    min-width: 0 !important; min-height: 0 !important;
+    overflow-y: auto !important; overflow-x: hidden !important;
+  }
+  #phaseKiosk:not(.hidden) > div:first-child > div:last-child {
+    min-height: 0 !important; overflow: visible !important;
+  }
+  #phaseKiosk:not(.hidden) #productGrid { overflow: visible !important; max-height: none !important; }
+  #phaseKiosk:not(.hidden) > div:last-child {
+    width: auto !important; height: auto !important;
+    min-width: 0 !important; min-height: 0 !important;
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) auto !important;
+    overflow: hidden !important;
+    position: relative !important;
+    z-index: 5 !important;
+  }
+  #phaseKiosk:not(.hidden) #cartItemsList {
+    min-height: 0 !important; height: auto !important;
+    overflow-y: auto !important; overflow-x: hidden !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    min-height: 0 !important; height: auto !important;
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 50 !important;
+    pointer-events: auto !important;
+  }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    position: relative !important;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    min-height: 64px !important;
+    height: 64px !important;
+    margin: 0 !important;
+  }
+
+  #phaseCheckout:not(.hidden) {
+    position: absolute !important;
+    inset: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 58%) minmax(300px, 42%) !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    overflow: hidden !important;
+    z-index: 2 !important;
+  }
+  #phaseCheckout:not(.hidden) > div:first-child,
+  #phaseCheckout:not(.hidden) > div:last-child {
+    width: auto !important; height: auto !important;
+    min-width: 0 !important; min-height: 0 !important;
+    max-height: none !important; box-sizing: border-box !important;
+    overflow-y: auto !important; overflow-x: hidden !important;
+  }
+  #phaseCheckout #paymentProgressPanel { min-height: 0 !important; overflow: visible !important; }
+  #phaseCheckout #dropSlotArea { min-height: 150px !important; max-height: 220px !important; overflow: visible !important; }
+  #phaseCheckout #insertedMoneyVisual { max-height: 110px !important; overflow-y: auto !important; }
+  #phaseCheckout #cashActionArea { position: relative !important; z-index: 100 !important; pointer-events: auto !important; }
+  #phaseCheckout #btnProceedPayment {
+    position: relative !important; z-index: 110 !important;
+    pointer-events: auto !important; display: flex !important; visibility: visible !important;
+    opacity: 1 !important; min-height: 64px !important; height: 64px !important;
+  }
+}
+
+/* PORTRAIT TABLET */
+@media (min-width: 600px) and (max-width: 799px) {
+  #phaseKiosk:not(.hidden) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr) minmax(250px, 44%) !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child {
+    border-left: 0 !important;
+    border-top: 2px solid #cbd5e1 !important;
+    grid-template-rows: auto minmax(0, 1fr) auto !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    padding: 8px 12px max(8px, env(safe-area-inset-bottom)) !important;
+  }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    min-height: 64px !important; height: 64px !important;
+  }
+
+  #phaseCheckout:not(.hidden) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr) minmax(280px, 45%) !important;
+  }
+  #phaseCheckout:not(.hidden) > div:first-child,
+  #phaseCheckout:not(.hidden) > div:last-child { padding-bottom: 10px !important; }
+}
+
+/* Very narrow / short tablet safety: never let the action button shrink away. */
+@media (min-width: 600px) and (max-width: 1400px) and (max-height: 700px) {
+  #phaseKiosk:not(.hidden) > div:last-child { grid-template-rows: auto minmax(0,1fr) 92px !important; }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child { padding: 8px 10px !important; }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout { height: 68px !important; min-height: 68px !important; }
+}
+</style>
+
+<style id="v22-real-fixed-cart-footer">
+/* v22: 결제하기 버튼을 '화면 안에 존재하는 고정 하단 영역'으로 분리
+   핵심: 장바구니 내용이 길어져도 총액/결제 버튼은 절대 밀리지 않는다. */
+@media (min-width: 600px) and (max-width: 1600px) {
+  html, body { width:100%; height:100%; overflow:hidden !important; }
+  body { min-height:0 !important; }
+  main { flex:1 1 auto !important; min-height:0 !important; height:auto !important; overflow:hidden !important; position:relative !important; }
+
+  #phaseKiosk.hidden, #phaseCheckout.hidden { display:none !important; }
+
+  #phaseKiosk:not(.hidden) {
+    position:absolute !important; inset:0 !important;
+    width:100% !important; height:100% !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+    display:grid !important;
+    z-index:20 !important;
+  }
+
+  /* 기본 태블릿: 가로 */
+  #phaseKiosk:not(.hidden) { grid-template-columns:minmax(0,1fr) 40% !important; grid-template-rows:1fr !important; }
+
+  #phaseKiosk:not(.hidden) > div:first-child {
+    min-width:0 !important; min-height:0 !important;
+    width:auto !important; height:auto !important;
+    overflow-y:auto !important; overflow-x:hidden !important;
+    box-sizing:border-box !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:first-child > div:nth-child(2) {
+    min-height:0 !important;
+    overflow:visible !important;
+  }
+
+  #phaseKiosk:not(.hidden) #productGrid {
+    overflow:visible !important;
+    max-height:none !important;
+  }
+
+  /* 장바구니: 헤더 / 상품목록 / 고정 하단영역 */
+  #phaseKiosk:not(.hidden) > div:last-child {
+    min-width:0 !important; min-height:0 !important;
+    width:auto !important; height:auto !important;
+    position:relative !important;
+    display:block !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+    z-index:30 !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:first-child {
+    height:76px !important;
+    box-sizing:border-box !important;
+    position:relative !important;
+    z-index:40 !important;
+  }
+
+  #phaseKiosk:not(.hidden) #cartItemsList {
+    position:absolute !important;
+    left:0 !important; right:0 !important; top:76px !important; bottom:170px !important;
+    height:auto !important; min-height:0 !important;
+    box-sizing:border-box !important;
+    overflow-y:auto !important; overflow-x:hidden !important;
+    padding:12px !important;
+    z-index:31 !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    position:absolute !important;
+    left:0 !important; right:0 !important; bottom:0 !important;
+    height:170px !important; min-height:170px !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+    padding:10px 14px !important;
+    background:#f8fafc !important;
+    border-top:3px solid #cbd5e1 !important;
+    overflow:hidden !important;
+    z-index:100 !important;
+    pointer-events:auto !important;
+  }
+
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    position:relative !important;
+    display:flex !important;
+    width:100% !important;
+    height:64px !important; min-height:64px !important;
+    margin:8px 0 0 !important;
+    visibility:visible !important; opacity:1 !important;
+    z-index:200 !important;
+    pointer-events:auto !important;
+    touch-action:manipulation !important;
+    flex-shrink:0 !important;
+  }
+
+  /* 결제 화면도 같은 원리로 하단 버튼 영역을 보장 */
+  #phaseCheckout:not(.hidden) {
+    position:absolute !important; inset:0 !important;
+    width:100% !important; height:100% !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,58%) minmax(0,42%) !important;
+    overflow:hidden !important; z-index:25 !important;
+  }
+  #phaseCheckout:not(.hidden) > div:first-child,
+  #phaseCheckout:not(.hidden) > div:last-child {
+    min-width:0 !important; min-height:0 !important;
+    width:auto !important; height:auto !important;
+    overflow-y:auto !important; overflow-x:hidden !important;
+    box-sizing:border-box !important;
+  }
+  #phaseCheckout #btnProceedPayment {
+    position:relative !important; z-index:300 !important;
+    display:flex !important; visibility:visible !important; opacity:1 !important;
+    min-height:64px !important; height:64px !important;
+    pointer-events:auto !important; touch-action:manipulation !important;
+  }
+}
+
+/* 세로형: 장바구니를 화면 아래에 배치하고 그 안에서만 목록을 스크롤 */
+@media (orientation: portrait) and (min-width: 600px) and (max-width: 1600px) {
+  #phaseKiosk:not(.hidden) {
+    grid-template-columns:1fr !important;
+    grid-template-rows:minmax(0,1fr) 46% !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child {
+    border-left:0 !important;
+    border-top:3px solid #cbd5e1 !important;
+  }
+}
+
+/* 아주 짧은 화면에서는 하단 영역을 조금 더 크게 */
+@media (min-width:600px) and (max-width:1600px) and (max-height:700px) {
+  #phaseKiosk:not(.hidden) > div:last-child > div:first-child { height:66px !important; }
+  #phaseKiosk:not(.hidden) #cartItemsList { top:66px !important; bottom:166px !important; }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child { height:166px !important; min-height:166px !important; }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout { height:62px !important; min-height:62px !important; }
+}
+</style>
+
+<style id="tablet-full-page-scroll-v25">
+/* v25: tablet full-page scrolling comparison version */
+@media (min-width: 600px) and (max-width: 1400px) {
+  html, body {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+  body {
+    display: block !important;
+    min-height: 100vh !important;
+  }
+  body > header, header {
+    position: relative !important;
+    flex: none !important;
+  }
+  main {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    flex: none !important;
+  }
+  #phaseKiosk:not(.hidden), #phaseCheckout:not(.hidden) {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Kiosk: let the entire page grow naturally */
+  #phaseKiosk:not(.hidden) {
+    min-height: 0 !important;
+  }
+  #phaseKiosk .menu-board,
+  #phaseKiosk .menu-grid,
+  #phaseKiosk .products-area,
+  #phaseKiosk .product-area,
+  #phaseKiosk .cart-panel,
+  #phaseKiosk .cart-list,
+  #phaseKiosk .cart-items,
+  #phaseKiosk .cart-footer,
+  #phaseKiosk .cart-summary,
+  #phaseKiosk .cart-actions {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  /* Keep the cart footer in normal document flow: no floating/overlay */
+  #phaseKiosk .cart-panel,
+  #phaseKiosk .cart {
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  #phaseKiosk .cart-footer,
+  #phaseKiosk .cart-summary,
+  #phaseKiosk .cart-actions {
+    position: relative !important;
+    bottom: auto !important;
+    top: auto !important;
+    inset: auto !important;
+    transform: none !important;
+    z-index: 2 !important;
+  }
+
+  /* Checkout page also becomes ordinary document flow */
+  #phaseCheckout:not(.hidden) .payment-area,
+  #phaseCheckout:not(.hidden) .wallet-area,
+  #phaseCheckout:not(.hidden) .payment-panel,
+  #phaseCheckout:not(.hidden) .wallet-panel,
+  #phaseCheckout:not(.hidden) .inserted-money-area {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 799px) {
+  #phaseKiosk:not(.hidden) {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  #phaseKiosk .menu-area,
+  #phaseKiosk .product-area,
+  #phaseKiosk .products-area {
+    flex: none !important;
+    width: 100% !important;
+  }
+  #phaseKiosk .cart-panel,
+  #phaseKiosk .cart {
+    width: 100% !important;
+    flex: none !important;
+  }
+}
+</style>
+<style id="v26-tablet-natural-page-scroll">
+/* v26: tablet uses one real document scroll; no fixed/viewport-bound cart or checkout. */
+@media (min-width: 600px) and (max-width: 1400px) {
+  html { height:auto !important; min-height:100% !important; overflow-x:hidden !important; overflow-y:auto !important; }
+  body { height:auto !important; min-height:100vh !important; width:100% !important; overflow-x:hidden !important; overflow-y:auto !important; display:block !important; }
+  main { display:block !important; width:100% !important; height:auto !important; min-height:0 !important; overflow:visible !important; position:static !important; }
+  #phaseKiosk:not(.hidden), #phaseCheckout:not(.hidden) { position:static !important; inset:auto !important; display:block !important; width:100% !important; height:auto !important; min-height:0 !important; max-height:none !important; overflow:visible !important; }
+
+  #phaseKiosk:not(.hidden) > div:first-child, #phaseKiosk:not(.hidden) > div:last-child { display:block !important; width:100% !important; height:auto !important; min-height:0 !important; max-height:none !important; overflow:visible !important; position:static !important; }
+  #phaseKiosk:not(.hidden) > div:first-child { padding-bottom:18px !important; }
+  #phaseKiosk:not(.hidden) > div:last-child { border-left:0 !important; border-top:3px solid #cbd5e1 !important; }
+  #phaseKiosk:not(.hidden) #productGrid, #phaseKiosk:not(.hidden) #cartItemsList, #phaseKiosk:not(.hidden) #cartItemsContainer { max-height:none !important; height:auto !important; overflow:visible !important; }
+  #phaseKiosk:not(.hidden) #cartItemsList { min-height:0 !important; }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child { position:static !important; height:auto !important; min-height:0 !important; max-height:none !important; overflow:visible !important; padding-bottom:24px !important; }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout { position:static !important; width:100% !important; height:auto !important; min-height:68px !important; margin-top:10px !important; }
+
+  #phaseCheckout:not(.hidden) > div:first-child, #phaseCheckout:not(.hidden) > div:last-child { display:block !important; width:100% !important; height:auto !important; min-height:0 !important; max-height:none !important; overflow:visible !important; position:static !important; }
+  #phaseCheckout:not(.hidden) > div:first-child { padding-bottom:24px !important; }
+  #phaseCheckout:not(.hidden) > div:last-child { padding-bottom:32px !important; border-top:3px solid rgba(245,158,11,.25) !important; }
+  #phaseCheckout #checkoutItemsList, #phaseCheckout #paymentProgressPanel, #phaseCheckout #cashProgressGroup, #phaseCheckout #cardProgressGroup, #phaseCheckout #dropSlotArea, #phaseCheckout #cardDropSlotArea, #phaseCheckout #insertedMoneyVisual, #phaseCheckout #walletCashSection, #phaseCheckout #walletCardSection, #phaseCheckout #walletCoinContainer { max-height:none !important; height:auto !important; overflow:visible !important; }
+  #phaseCheckout #insertedMoneyVisual { min-height:120px !important; }
+  #phaseCheckout #btnProceedPayment { position:static !important; width:100% !important; min-height:68px !important; height:auto !important; }
+}
 </style>
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden flex flex-col">
@@ -828,9 +1768,20 @@
 
           <!-- CARD SECTION -->
           <div id="cardProgressGroup" class="hidden">
-            <div id="cardDropSlotArea" class="p-5 sm:p-8 border-4 border-dashed border-slate-300 bg-slate-50 rounded-2xl flex flex-col items-center justify-center text-slate-700">
+            <div id="cardDropSlotArea"
+                 ondragover="handleCardDragOver(event)"
+                 ondragleave="handleCardDragLeave(event)"
+                 ondrop="handleCardDrop(event)"
+                 class="relative p-5 sm:p-8 border-4 border-dashed border-slate-300 bg-slate-50 rounded-2xl flex flex-col items-center justify-center text-slate-700 transition">
               <i class="fa-regular fa-credit-card text-5xl sm:text-6xl text-amber-500 mb-3"></i>
               <p class="font-black text-lg sm:text-2xl text-center">오른쪽 카드로 결제할 수 있어요.</p>
+              <div id="cardPaymentConfirmPanel" class="hidden absolute inset-0 bg-white/95 rounded-2xl flex flex-col items-center justify-center p-4 text-center z-20">
+                <div class="text-indigo-700 font-black text-xl sm:text-3xl mb-4">카드 결제를 진행하시겠습니까?</div>
+                <div class="flex gap-3 w-full max-w-sm">
+                  <button onclick="confirmCardPaymentYes()" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-lg sm:text-xl rounded-2xl shadow active:scale-95">예</button>
+                  <button onclick="confirmCardPaymentNo()" class="flex-1 py-3 bg-slate-500 hover:bg-slate-600 text-white font-black text-lg sm:text-xl rounded-2xl shadow active:scale-95">아니오</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1866,8 +2817,13 @@
       const secCash = document.getElementById('walletCashSection');
       const secCard = document.getElementById('walletCardSection');
       const cashProgress = document.getElementById('cashProgressGroup');
+      const cardProgress = document.getElementById('cardProgressGroup');
       const slotIcon = document.getElementById('slotIcon');
       const slotText = document.getElementById('slotInstructions');
+      const cardConfirm = document.getElementById('cardPaymentConfirmPanel');
+
+      if (cardConfirm) cardConfirm.classList.add('hidden');
+      appState.paymentConfirmed = false;
 
       if (method === 'cash') {
         btnCash.className = "py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-amber-500 text-white border-amber-600 shadow-md transition active:scale-95";
@@ -1875,6 +2831,7 @@
         secCash.classList.remove('hidden');
         secCard.classList.add('hidden');
         cashProgress.classList.remove('hidden');
+        cardProgress.classList.add('hidden');
         slotIcon.className = "fa-solid fa-hand-holding-dollar text-4xl sm:text-5xl text-amber-600 mb-1";
         slotText.innerHTML = "오른쪽 지갑에서 현금을 터치하거나<br>이곳으로 끌어다 놓으세요!";
       } else {
@@ -1883,8 +2840,9 @@
         secCard.classList.remove('hidden');
         secCash.classList.add('hidden');
         cashProgress.classList.add('hidden');
-        slotIcon.className = "fa-regular fa-credit-card text-4xl sm:text-5xl text-amber-600 mb-1";
-        slotText.innerHTML = "오른쪽 카드를 터치하거나<br>이곳 단말기로 끌어다 놓으세요!";
+        cardProgress.classList.remove('hidden');
+        const cardSlot = document.getElementById('cardDropSlotArea');
+        if (cardSlot) cardSlot.classList.remove('drop-active');
       }
       updatePaymentHint();
     }
@@ -1913,11 +2871,37 @@
     }
 
     function payCard() {
-      if (appState.paymentConfirmed) return;
-      playAudio('success');
+      if (appState.paymentMethod !== 'card' || appState.paymentConfirmed) return;
       const total = appState.cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      if (total <= 0) return;
+      playAudio('success');
       appState.paidAmount = total;
-      showPaymentConfirmation();
+      appState.paymentConfirmed = true;
+      const panel = document.getElementById('cardPaymentConfirmPanel');
+      if (panel) panel.classList.remove('hidden');
+      const slot = document.getElementById('cardDropSlotArea');
+      if (slot) slot.classList.add('payment-complete');
+      updatePaymentProgressUI();
+    }
+
+    function confirmCardPaymentYes() {
+      playAudio('success');
+      const panel = document.getElementById('cardPaymentConfirmPanel');
+      if (panel) panel.classList.add('hidden');
+      const slot = document.getElementById('cardDropSlotArea');
+      if (slot) slot.classList.remove('payment-complete');
+      showReceiptModal();
+    }
+
+    function confirmCardPaymentNo() {
+      playAudio('click');
+      appState.paymentConfirmed = false;
+      appState.paidAmount = 0;
+      const panel = document.getElementById('cardPaymentConfirmPanel');
+      if (panel) panel.classList.add('hidden');
+      const slot = document.getElementById('cardDropSlotArea');
+      if (slot) slot.classList.remove('payment-complete');
+      updatePaymentProgressUI();
     }
 
     function resetInsertedCash() {
@@ -2092,6 +3076,29 @@
       if (appState.paymentMethod === 'cash' && draggedCashValue) {
         payCash(draggedCashValue);
       } else if (appState.paymentMethod === 'card' && draggedIsCard) {
+        payCard();
+      }
+      draggedCashValue = null;
+      draggedIsCard = false;
+    }
+
+    function handleCardDragOver(e) {
+      if (appState.paymentMethod !== 'card') return;
+      e.preventDefault();
+      const slot = document.getElementById('cardDropSlotArea');
+      if (slot) slot.classList.add('drop-active');
+    }
+
+    function handleCardDragLeave(e) {
+      const slot = document.getElementById('cardDropSlotArea');
+      if (slot) slot.classList.remove('drop-active');
+    }
+
+    function handleCardDrop(e) {
+      e.preventDefault();
+      const slot = document.getElementById('cardDropSlotArea');
+      if (slot) slot.classList.remove('drop-active');
+      if (appState.paymentMethod === 'card' && draggedIsCard) {
         payCard();
       }
       draggedCashValue = null;
@@ -2382,3 +3389,179 @@
   </script>
 </body>
 </html>
+
+<style id="v23-fixed-cart-footer">
+/* v23: Tablet cart footer must never be taller than the available viewport.
+   The cart list gets the remaining height; the total/payment footer is compact and fixed. */
+@media (min-width: 600px) and (max-width: 1400px) {
+  #phaseKiosk:not(.hidden) > div:last-child {
+    min-height: 0 !important;
+    overflow: hidden !important;
+    grid-template-rows: auto minmax(0, 1fr) minmax(150px, auto) !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    box-sizing: border-box !important;
+    min-height: 150px !important;
+    height: 150px !important;
+    max-height: 150px !important;
+    padding: 10px 16px 12px !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    z-index: 100 !important;
+    background: #f8fafc !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child > div:first-child {
+    flex: 0 0 50px !important;
+    min-height: 50px !important;
+    height: 50px !important;
+    line-height: 1 !important;
+  }
+
+  #phaseKiosk:not(.hidden) #cartTotalAmount {
+    font-size: 2.35rem !important;
+    line-height: 1 !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child > div:first-child > span:first-child {
+    font-size: 1.45rem !important;
+    line-height: 1 !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child > div:first-child > div:last-child > span:last-child {
+    font-size: 1.35rem !important;
+    line-height: 1 !important;
+  }
+
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    flex: 0 0 62px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 62px !important;
+    height: 62px !important;
+    max-height: 62px !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    border-radius: 14px !important;
+    font-size: 1.55rem !important;
+    line-height: 1 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Portrait tablet: the cart is the lower grid row, and its footer is compact. */
+@media (min-width: 600px) and (max-width: 799px) {
+  #phaseKiosk:not(.hidden) {
+    grid-template-rows: minmax(0, 1fr) minmax(190px, 36%) !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    height: 150px !important;
+    min-height: 150px !important;
+    max-height: 150px !important;
+  }
+}
+</style>
+
+<style id="v24-cart-layout-real-fix">
+/* v24: Do not overlay the cart footer on top of the cart list.
+   The cart itself is a 3-row grid: header / scrollable list / total+payment footer. */
+@media (min-width: 600px) and (max-width: 1600px) {
+  #phaseKiosk:not(.hidden) > div:last-child {
+    display: grid !important;
+    grid-template-rows: 76px minmax(0, 1fr) 150px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:first-child {
+    position: relative !important;
+    inset: auto !important;
+    width: auto !important;
+    height: 76px !important;
+    min-height: 0 !important;
+    grid-row: 1 !important;
+    overflow: hidden !important;
+  }
+
+  #phaseKiosk:not(.hidden) #cartItemsList {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    grid-row: 2 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    z-index: 1 !important;
+    padding: 12px !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child > div:last-child {
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    width: auto !important;
+    height: 150px !important;
+    min-height: 150px !important;
+    max-height: 150px !important;
+    grid-row: 3 !important;
+    margin: 0 !important;
+    padding: 10px 16px 12px !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    z-index: 2 !important;
+    border-top: 3px solid #cbd5e1 !important;
+  }
+
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    position: relative !important;
+    width: 100% !important;
+    height: 62px !important;
+    min-height: 62px !important;
+    max-height: 62px !important;
+    margin: 0 !important;
+    z-index: 3 !important;
+  }
+}
+
+/* Portrait: the shopping area and cart share the viewport; inside the cart,
+   only the item list scrolls while the footer stays in its own row. */
+@media (orientation: portrait) and (min-width: 600px) and (max-width: 1600px) {
+  #phaseKiosk:not(.hidden) {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: minmax(0, 1fr) minmax(260px, 46%) !important;
+  }
+
+  #phaseKiosk:not(.hidden) > div:last-child {
+    grid-template-rows: 76px minmax(0, 1fr) 150px !important;
+  }
+}
+
+/* Short landscape tablets: give the footer enough room without overlaying it. */
+@media (min-width: 800px) and (max-width: 1600px) and (max-height: 700px) {
+  #phaseKiosk:not(.hidden) > div:last-child {
+    grid-template-rows: 66px minmax(0, 1fr) 166px !important;
+  }
+  #phaseKiosk:not(.hidden) > div:last-child > div:first-child {
+    height: 66px !important;
+  }
+  #phaseKiosk:not(.hidden) #btnProceedToCheckout {
+    height: 62px !important;
+    min-height: 62px !important;
+  }
+}
+</style>
