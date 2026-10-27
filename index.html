@@ -2826,6 +2826,12 @@
       appState.paymentConfirmed = false;
 
       if (method === 'cash') {
+        // Force wallet/payment sections to match the selected method.
+        // Inline display wins over tablet flex-layout CSS rules.
+        secCash.style.display = 'flex';
+        secCard.style.display = 'none';
+        cashProgress.style.display = 'block';
+        cardProgress.style.display = 'none';
         btnCash.className = "py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-amber-500 text-white border-amber-600 shadow-md transition active:scale-95";
         btnCard.className = "py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-white text-slate-700 border-slate-300 hover:bg-slate-50 transition active:scale-95";
         secCash.classList.remove('hidden');
@@ -2835,6 +2841,11 @@
         slotIcon.className = "fa-solid fa-hand-holding-dollar text-4xl sm:text-5xl text-amber-600 mb-1";
         slotText.innerHTML = "오른쪽 지갑에서 현금을 터치하거나<br>이곳으로 끌어다 놓으세요!";
       } else {
+        // Card payment: cash wallet and cash progress must be completely hidden.
+        secCash.style.display = 'none';
+        secCard.style.display = 'flex';
+        cashProgress.style.display = 'none';
+        cardProgress.style.display = 'block';
         btnCard.className = "py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-amber-500 text-white border-amber-600 shadow-md transition active:scale-95";
         btnCash.className = "py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-white text-slate-700 border-slate-300 hover:bg-slate-50 transition active:scale-95";
         secCard.classList.remove('hidden');
