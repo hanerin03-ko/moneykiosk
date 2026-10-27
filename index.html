@@ -1191,6 +1191,20 @@
       }
     }
 
+
+    /* v29: payment mode visibility is isolated from the generic hidden/flex system.
+       Only this class controls whether cash/card sections exist in the layout. */
+    #phaseCheckout .payment-mode-section.payment-mode-hidden {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    #phaseCheckout .payment-mode-section:not(.payment-mode-hidden) {
+      visibility: visible;
+      pointer-events: auto;
+    }
+
 </style>
 
 <style id="v21-tablet-layout-fix">
@@ -1727,7 +1741,7 @@
             </div>
           </div>
 
-          <div id="cashProgressGroup">
+          <div id="cashProgressGroup" class="payment-mode-section">
             <!-- CASH / CARD DROP ZONE TARGET -->
             <div id="dropSlotArea"
                  ondragover="handleDragOver(event)"
@@ -1767,7 +1781,7 @@
           </div>
 
           <!-- CARD SECTION -->
-          <div id="cardProgressGroup" class="hidden">
+          <div id="cardProgressGroup" class="payment-mode-section">
             <div id="cardDropSlotArea"
                  ondragover="handleCardDragOver(event)"
                  ondragleave="handleCardDragLeave(event)"
@@ -1810,7 +1824,7 @@
         </div>
 
         <!-- CASH SECTION -->
-        <div id="walletCashSection" class="flex-1 flex flex-col justify-center space-y-4 my-auto py-2">
+        <div id="walletCashSection" class="payment-mode-section flex-1 flex flex-col justify-center space-y-4 my-auto py-2">
           
           <!-- Paper Bills Grid -->
           <div>
@@ -1922,7 +1936,7 @@
         </div>
 
         <!-- CARD SECTION -->
-        <div id="walletCardSection" class="hidden flex-1 flex flex-col items-center justify-center p-4">
+        <div id="walletCardSection" class="payment-mode-section flex-1 flex flex-col items-center justify-center p-4">
           <div draggable="true" ondragstart="handleCardDragStart(event)" onclick="payCard()"
                class="w-full max-w-xs h-48 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 rounded-2xl p-5 shadow-2xl border-2 border-indigo-300 cursor-pointer transform hover:scale-105 active:scale-95 transition flex flex-col justify-between text-white relative overflow-hidden">
             <div class="flex justify-between items-center">
@@ -2825,36 +2839,36 @@
       if (cardConfirm) cardConfirm.classList.add('hidden');
       appState.paymentConfirmed = false;
 
+      // Payment-mode visibility is controlled ONLY by .payment-mode-hidden.
+      // This avoids conflicts with the tablet flex/grid CSS and the generic .hidden class.
+      const showPaymentSection = (el, show) => {
+        if (!el) return;
+        el.classList.toggle('payment-mode-hidden', !show);
+        el.setAttribute('aria-hidden', show ? 'false' : 'true');
+      };
+
       if (method === 'cash') {
-        // Force wallet/payment sections to match the selected method.
-        // Inline display wins over tablet flex-layout CSS rules.
-        secCash.style.display = 'flex';
-        secCard.style.display = 'none';
-        cashProgress.style.display = 'block';
-        cardProgress.style.display = 'none';
+        showPaymentSection(secCash, true);
+        showPaymentSection(secCard, false);
+        showPaymentSection(cashProgress, true);
+        showPaymentSection(cardProgress, false);
+
         btnCash.className = "py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-amber-500 text-white border-amber-600 shadow-md transition active:scale-95";
         btnCard.className = "py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-white text-slate-700 border-slate-300 hover:bg-slate-50 transition active:scale-95";
-        secCash.classList.remove('hidden');
-        secCard.classList.add('hidden');
-        cashProgress.classList.remove('hidden');
-        cardProgress.classList.add('hidden');
         slotIcon.className = "fa-solid fa-hand-holding-dollar text-4xl sm:text-5xl text-amber-600 mb-1";
         slotText.innerHTML = "오른쪽 지갑에서 현금을 터치하거나<br>이곳으로 끌어다 놓으세요!";
       } else {
-        // Card payment: cash wallet and cash progress must be completely hidden.
-        secCash.style.display = 'none';
-        secCard.style.display = 'flex';
-        cashProgress.style.display = 'none';
-        cardProgress.style.display = 'block';
+        showPaymentSection(secCash, false);
+        showPaymentSection(secCard, true);
+        showPaymentSection(cashProgress, false);
+        showPaymentSection(cardProgress, true);
+
         btnCard.className = "py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-amber-500 text-white border-amber-600 shadow-md transition active:scale-95";
         btnCash.className = "py-3.5 sm:py-4 font-black rounded-2xl text-lg sm:text-2xl border-2 flex items-center justify-center space-x-3 bg-white text-slate-700 border-slate-300 hover:bg-slate-50 transition active:scale-95";
-        secCard.classList.remove('hidden');
-        secCash.classList.add('hidden');
-        cashProgress.classList.add('hidden');
-        cardProgress.classList.remove('hidden');
         const cardSlot = document.getElementById('cardDropSlotArea');
         if (cardSlot) cardSlot.classList.remove('drop-active');
       }
+
       updatePaymentHint();
     }
 
@@ -3576,12 +3590,4 @@
   }
 }
 
-    /* v27: hidden must always win over tablet flex layout.
-       Prevent the cash wallet from appearing together with the card wallet. */
-    #walletCashSection.hidden,
-    #walletCardSection.hidden,
-    #cashProgressGroup.hidden,
-    #cardProgressGroup.hidden {
-      display: none !important;
-    }
 </style>
