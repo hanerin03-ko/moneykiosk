@@ -1587,7 +1587,7 @@
       </div>
       <div>
         <h1 id="appStoreTitle" class="text-2xl sm:text-3xl font-black text-amber-400">꿈나무 카페</h1>
-        <p class="text-xs sm:text-sm text-slate-300 font-bold">특수교육 키오스크 화폐 학습 앱</p>
+        <p class="text-xs sm:text-sm text-slate-300 font-bold">특수학급 키오스크 화폐 학습 앱</p>
       </div>
     </div>
 
@@ -3564,4 +3564,13 @@
     min-height: 62px !important;
   }
 }
+
+    /* v27: hidden must always win over tablet flex layout.
+       Prevent the cash wallet from appearing together with the card wallet. */
+    #walletCashSection.hidden,
+    #walletCardSection.hidden,
+    #cashProgressGroup.hidden,
+    #cardProgressGroup.hidden {
+      display: none !important;
+    }
 </style>
