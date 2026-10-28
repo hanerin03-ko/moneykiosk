@@ -1601,7 +1601,7 @@
       </div>
       <div>
         <h1 id="appStoreTitle" class="text-2xl sm:text-3xl font-black text-amber-400">꿈나무 카페</h1>
-        <p class="text-xs sm:text-sm text-slate-300 font-bold">특수교육 키오스크 화폐 학습 앱</p>
+        <p class="text-xs sm:text-sm text-slate-300 font-bold">특수학급 키오스크 화폐 학습 앱</p>
       </div>
     </div>
 
@@ -3739,4 +3739,47 @@
     .card-drag-ghost * {
       pointer-events: none !important;
     }
+</style>
+
+<style id="menu-board-scroll-v33">
+/* v33: 상품이 9개 이상이어도 메뉴판 영역에서 세로 스크롤 가능하도록 수정 */
+#phaseKiosk:not(.hidden) > div:first-child {
+  min-height: 0 !important;
+}
+
+#phaseKiosk:not(.hidden) > div:first-child > div:nth-child(2) {
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-gutter: stable !important;
+}
+
+#phaseKiosk:not(.hidden) #productGrid {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+#phaseKiosk:not(.hidden) > div:first-child > div:nth-child(2).custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+#phaseKiosk:not(.hidden) > div:first-child > div:nth-child(2).custom-scrollbar::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+#phaseKiosk:not(.hidden) > div:first-child > div:nth-child(2).custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 10px;
+}
+
+/* 세로형 태블릿에서도 상품 영역 자체를 스크롤 영역으로 사용 */
+@media (min-width: 600px) and (max-width: 1400px) {
+  #phaseKiosk:not(.hidden) > div:first-child > div:nth-child(2) {
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+}
 </style>
