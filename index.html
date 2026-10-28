@@ -1937,8 +1937,10 @@
 
         <!-- CARD SECTION -->
         <div id="walletCardSection" class="payment-mode-section flex-1 flex flex-col items-center justify-center p-4">
-          <div draggable="true" ondragstart="handleCardDragStart(event)" onclick="payCard()"
-               class="w-full max-w-xs h-48 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 rounded-2xl p-5 shadow-2xl border-2 border-indigo-300 cursor-pointer transform hover:scale-105 active:scale-95 transition flex flex-col justify-between text-white relative overflow-hidden">
+          <div id="learningCard" onclick="handleCardClick(event)"
+               onpointerdown="handleCardPointerDown(event)" onpointermove="handleCardPointerMove(event)" onpointerup="handleCardPointerUp(event)" onpointercancel="handleCardPointerCancel(event)"
+               class="w-full max-w-xs h-48 bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 rounded-2xl p-5 shadow-2xl border-2 border-indigo-300 cursor-grab transform hover:scale-105 active:scale-95 transition flex flex-col justify-between text-white relative overflow-hidden select-none"
+               style="touch-action:none;">
             <div class="flex justify-between items-center">
               <span class="font-black tracking-widest text-base">LEARNING CARD</span>
               <i class="fa-solid fa-wifi text-xl opacity-80"></i>
@@ -2858,6 +2860,13 @@
         slotIcon.className = "fa-solid fa-hand-holding-dollar text-4xl sm:text-5xl text-amber-600 mb-1";
         slotText.innerHTML = "오른쪽 지갑에서 현금을 터치하거나<br>이곳으로 끌어다 놓으세요!";
       } else {
+        // v31 debug fix: switching from cash to card abandons the current
+        // cash payment. Clear both the numeric state and the visual token list
+        // so returning to cash can never show mismatched money.
+        appState.paidAmount = 0;
+        appState.insertedTokens = [];
+        appState.paymentConfirmed = false;
+        hidePaymentConfirmation();
         showPaymentSection(secCash, false);
         showPaymentSection(secCard, true);
         showPaymentSection(cashProgress, false);
@@ -3083,10 +3092,132 @@
       draggedCashValue = val;
       draggedIsCard = false;
     }
-    function handleCardDragStart(e) {
+
+    // v31: Card uses Pointer Events for mouse, touch, and pen. Native HTML5
+    // drag is intentionally not used for the card because pointer capture can
+    // prevent dragstart from firing reliably on desktop browsers.
+    let cardPointerDrag = null;
+    let suppressNextCardClick = false;
+
+    // v32: create a light, semi-transparent drag ghost so students can see
+    // the card moving with their finger/mouse/pointer.
+    function createCardDragGhost(card, x, y) {
+      const ghost = card.cloneNode(true);
+      ghost.removeAttribute('id');
+      ghost.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+      ghost.classList.add('card-drag-ghost');
+      ghost.style.width = `${card.getBoundingClientRect().width}px`;
+      ghost.style.height = `${card.getBoundingClientRect().height}px`;
+      ghost.style.left = `${x}px`;
+      ghost.style.top = `${y}px`;
+      document.body.appendChild(ghost);
+      return ghost;
+    }
+
+    function moveCardDragGhost(ghost, x, y) {
+      if (!ghost) return;
+      ghost.style.left = `${x}px`;
+      ghost.style.top = `${y}px`;
+    }
+
+    function removeCardDragGhost(ghost) {
+      if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+    }
+
+    function handleCardPointerDown(e) {
+      if (appState.paymentMethod !== 'card' || appState.paymentConfirmed) return;
+      if (e.button !== undefined && e.button !== 0) return;
+
+      const card = e.currentTarget;
+      cardPointerDrag = {
+        pointerId: e.pointerId,
+        startX: e.clientX,
+        startY: e.clientY,
+        moved: false,
+        card,
+        ghost: null
+      };
+      suppressNextCardClick = false;
       draggedIsCard = true;
       draggedCashValue = null;
+      try { card.setPointerCapture(e.pointerId); } catch (_) {}
     }
+
+    function handleCardPointerMove(e) {
+      if (!cardPointerDrag || e.pointerId !== cardPointerDrag.pointerId) return;
+
+      const dx = e.clientX - cardPointerDrag.startX;
+      const dy = e.clientY - cardPointerDrag.startY;
+      if (!cardPointerDrag.moved && Math.hypot(dx, dy) > 10) {
+        cardPointerDrag.moved = true;
+        suppressNextCardClick = true;
+        cardPointerDrag.card.classList.add('dragging-card');
+        cardPointerDrag.ghost = createCardDragGhost(cardPointerDrag.card, e.clientX, e.clientY);
+      }
+      if (!cardPointerDrag.moved) return;
+
+      moveCardDragGhost(cardPointerDrag.ghost, e.clientX, e.clientY);
+
+      const slot = document.getElementById('cardDropSlotArea');
+      if (slot) {
+        const r = slot.getBoundingClientRect();
+        const over = e.clientX >= r.left && e.clientX <= r.right &&
+                     e.clientY >= r.top && e.clientY <= r.bottom;
+        slot.classList.toggle('drop-active', over);
+      }
+      e.preventDefault();
+    }
+
+    function handleCardPointerUp(e) {
+      if (!cardPointerDrag || e.pointerId !== cardPointerDrag.pointerId) return;
+
+      const drag = cardPointerDrag;
+      cardPointerDrag = null;
+      drag.card.classList.remove('dragging-card');
+      removeCardDragGhost(drag.ghost);
+
+      const slot = document.getElementById('cardDropSlotArea');
+      if (slot) {
+        const r = slot.getBoundingClientRect();
+        const over = drag.moved &&
+                     e.clientX >= r.left && e.clientX <= r.right &&
+                     e.clientY >= r.top && e.clientY <= r.bottom;
+        slot.classList.remove('drop-active');
+        if (over && appState.paymentMethod === 'card' && !appState.paymentConfirmed) {
+          payCard();
+        }
+      }
+
+      draggedIsCard = false;
+      draggedCashValue = null;
+      try { drag.card.releasePointerCapture(e.pointerId); } catch (_) {}
+    }
+
+    function handleCardPointerCancel(e) {
+      if (!cardPointerDrag || e.pointerId !== cardPointerDrag.pointerId) return;
+      const drag = cardPointerDrag;
+      const card = drag.card;
+      cardPointerDrag = null;
+      card.classList.remove('dragging-card');
+      removeCardDragGhost(drag.ghost);
+      const slot = document.getElementById('cardDropSlotArea');
+      if (slot) slot.classList.remove('drop-active');
+      draggedIsCard = false;
+      draggedCashValue = null;
+      suppressNextCardClick = false;
+    }
+
+    function handleCardClick(e) {
+      // Pointer drag has already been handled on pointerup. Prevent the
+      // browser's synthetic click from opening the confirmation a second time.
+      if (suppressNextCardClick) {
+        suppressNextCardClick = false;
+        e.preventDefault();
+        return;
+      }
+      payCard();
+    }
+
     function handleDragOver(e) {
       e.preventDefault();
       document.getElementById('dropSlotArea').classList.add('drop-active');
@@ -3100,13 +3231,12 @@
 
       if (appState.paymentMethod === 'cash' && draggedCashValue) {
         payCash(draggedCashValue);
-      } else if (appState.paymentMethod === 'card' && draggedIsCard) {
-        payCard();
       }
       draggedCashValue = null;
       draggedIsCard = false;
     }
 
+    // Legacy native handlers retained only for the cash path/drop slot.
     function handleCardDragOver(e) {
       if (appState.paymentMethod !== 'card') return;
       e.preventDefault();
@@ -3123,11 +3253,7 @@
       e.preventDefault();
       const slot = document.getElementById('cardDropSlotArea');
       if (slot) slot.classList.remove('drop-active');
-      if (appState.paymentMethod === 'card' && draggedIsCard) {
-        payCard();
-      }
-      draggedCashValue = null;
-      draggedIsCard = false;
+      // Card drag is handled by Pointer Events in v31.
     }
 
     // RECEIPT MODAL AND IMAGE DOWNLOAD
@@ -3590,4 +3716,27 @@
   }
 }
 
+
+    /* v32: card drag feedback and visible drag preview */
+    #learningCard.dragging-card {
+      transform: scale(1.04) rotate(1deg);
+      opacity: 0.72;
+      cursor: grabbing;
+      z-index: 50;
+    }
+
+    .card-drag-ghost {
+      position: fixed !important;
+      margin: 0 !important;
+      pointer-events: none !important;
+      z-index: 99999 !important;
+      opacity: 0.62 !important;
+      transform: translate(-50%, -50%) scale(1.04) rotate(1deg) !important;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22) !important;
+      transition: none !important;
+      cursor: grabbing !important;
+    }
+    .card-drag-ghost * {
+      pointer-events: none !important;
+    }
 </style>
